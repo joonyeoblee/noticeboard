@@ -21,11 +21,11 @@ public class PostManager : Singleton<PostManager>
 		AccountDTO _accountDto = AccountManager.Instance.CurrentAccount;
 	}
 
-	public async Task TryAddPost(Post post)
+	public async Task TryAddPost(PostDTO postDto)
 	{
 		try
 		{
-			await _repository.AddPost(post.ToDto());
+			await _repository.AddPost(postDto);
 			OnDataChanged?.Invoke();
 		}
 		catch (Exception e)
@@ -53,6 +53,20 @@ public class PostManager : Singleton<PostManager>
 		catch (Exception e)
 		{
 			Debug.LogError($"Upload failed: {e.Message}");
+			return false;
+		}
+	}
+	public async Task<bool> TryUpdatePost(Post post)
+	{
+		try
+		{
+			await _repository.UpdatePost(post.ToDto());
+			OnDataChanged?.Invoke();
+			return true;
+		}
+		catch (Exception e)
+		{
+			Debug.LogError($"Modify failed: {e.Message}");
 			return false;
 		}
 	}

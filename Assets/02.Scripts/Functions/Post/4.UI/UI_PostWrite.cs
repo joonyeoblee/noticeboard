@@ -14,7 +14,7 @@ public class UI_PostWrite : MonoBehaviour
 		AccountDTO accountDto = AccountManager.Instance.CurrentAccount;
 		string Time = Timestamp.GetCurrentTimestamp().ToString();
 		Post post = new Post(accountDto.Email, accountDto.Nickname,$"{accountDto.Email}_{Time}",ContentInputField.text);
-		await PostManager.Instance.TryAddPost(post);
+		await PostManager.Instance.TryAddPost(post.ToDto());
 		
 		gameObject.SetActive(false);
 		await PostManager.Instance.OpenComments();

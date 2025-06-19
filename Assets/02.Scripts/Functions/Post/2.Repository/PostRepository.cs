@@ -76,11 +76,42 @@ public class PostRepository
 	}
 	public async Task UpdatePost(PostDTO post)
 	{
+		try
+		{
+			DocumentReference docRef = _db.Collection("Post").Document(post.PostID);
 
+			Dictionary<string, object> updates = new Dictionary<string, object>
+			{
+				{ "PostTime", post.PostTime },
+				{ "Nickname", post.Nickname },
+				{ "Content", post.Content }
+			};
+
+			await docRef.UpdateAsync(updates);
+			Debug.Log($"[PostRepository] 게시글 {post.PostID} 갱신 완료");
+		}
+		catch (Exception e)
+		{
+			Debug.LogError($"[PostRepository] 게시글 갱신 실패: {e.Message}");
+			throw;
+		}
 	}
+
+
 	public async Task DeletePost(string postId)
 	{
-
+		try
+		{
+			DocumentReference docRef = _db.Collection("Post").Document(postId);
+			await docRef.DeleteAsync();
+			// 댓글 좋아요 별도 처리 필요
+			Debug.Log($"[PostRepository] 게시글 {postId} 삭제 완료");
+		}
+		catch (Exception e)
+		{
+			Debug.LogError($"[PostRepository] 게시글 삭제 실패: {e.Message}");
+			throw;
+		}
 	}
 
 

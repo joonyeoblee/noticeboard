@@ -4,7 +4,7 @@
 	{
 		public GameObject Write;
 		public GameObject Posts;
-
+		
 
 		public void WriteObject()
 		{
