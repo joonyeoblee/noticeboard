@@ -2,34 +2,37 @@
 using Firebase.Firestore;
 public class Post
 {
-	public readonly Account Account;
-	public readonly string PostID;
-	public readonly string Content;
-	public readonly int Like;
-	public readonly int ViewCount;
-	public readonly Timestamp PostTime;
+	public string Email { get; }
+	public string Nickname { get; }
+	public string PostID { get; }
+	public string Content { get; }
+	public int Like { get; }
+	public int ViewCount { get; }
+	public Timestamp PostTime { get; }
+	public Post() { }
+
 
 	// 댓글 리스트 
 	public List<Comment> Comments = new List<Comment>();
 	// 어카운트
-	public Post(string content, int like, int viewCount, Timestamp postTime)
+
+	public Post(string email, string nickname, string postID, string content, int like = 0, int viewCount = 0)
+		: this(email, nickname, postID, content, like, viewCount, Timestamp.GetCurrentTimestamp())
 	{
+	}
+
+	public Post(string email, string nickname, string postID, string content, int like, int viewCount, Timestamp postTime)
+	{
+		Email = email;
+		Nickname = nickname;
+		PostID = postID;
 		Content = content;
 		Like = like;
 		ViewCount = viewCount;
 		PostTime = postTime;
 	}
-
-	public Post(string id, Dictionary<string, object> data)
+	public PostDTO ToDto()
 	{
-		PostID = id;
-		if (data.TryGetValue("content", out object content)) Content = content.ToString();
-		if (data.TryGetValue("Like", out object like)) Like = int.Parse(like.ToString());
-		if (data.TryGetValue("ViewCount", out object viewCount)) ViewCount = int.Parse(viewCount.ToString());
-		if (data.TryGetValue("PostTime", out object postTime) && postTime is Timestamp timestamp)
-		{
-			PostTime = timestamp;
-		}
-
+		return new PostDTO(Email, Nickname, PostID, Content, Like, ViewCount, PostTime);
 	}
 }

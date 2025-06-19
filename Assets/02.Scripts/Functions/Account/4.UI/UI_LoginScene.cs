@@ -1,131 +1,172 @@
-using System;
+﻿using System;
 using TMPro;
+using System.Security.Cryptography;
+using Firebase;
+using Firebase.Auth;
+using Firebase.Firestore;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-[Serializable]
-public class UI_InputField
-{
-	public TextMeshProUGUI ResultText;
-	public TMP_InputField EmailInputField;
-	public TMP_InputField NicknameInputField;
-	public TMP_InputField PasswordInputField;
-	public TMP_InputField PasswordConfirmInputField;
-	public Button ConfirmButton;
-}
+using UnityEngine.SceneManagement;
 
+[Serializable]
+public class UI_InputFields
+{
+    public TextMeshProUGUI ResultText; // 결과 텍스트
+    public TMP_InputField IDInputField;
+    public TMP_InputField NicknameInputField;
+    public TMP_InputField PasswordInputField;
+    public TMP_InputField PasswordConfirmInputField;
+    public Button ConfirmButton;
+}
 public class UI_LoginScene : MonoBehaviour
 {
-	[Header("패널")]
-	public GameObject LoginPanel;
-	public GameObject ResisterPanel;
-	[Header("로그인")]
-	public UI_InputField LoginInputField;
-	[Header("회원가입")]
-	public UI_InputField SignUpInputField;
+    [Header("패널")]
+    public GameObject LoginPanel;
+    public GameObject RegisterPanel;
 
-	private void Start()
-	{
-		LoginPanel.SetActive(true);
-		ResisterPanel.SetActive(false);
+    [Header("로그인")]   public UI_InputFields LoginInputFields;
+    [Header("회원가입")] public UI_InputFields RegisterInputFields;
+    
+    private FirebaseApp _app;
+    private FirebaseAuth _auth;
+    private FirebaseFirestore _db;
 
-		// LoginCheck();
-	}
+    
+    private void Start()
+    {
+        LoginPanel.SetActive(true);
+        RegisterPanel.SetActive(false);
+        // LoginCheck();
+        
+        LoginInputFields.ResultText.text = string.Empty;
+        RegisterInputFields.ResultText.text = string.Empty;
+        Init();
+    }
 
-	public void OnClickGoToResister()
-	{
-		LoginPanel.SetActive(false);
-		ResisterPanel.SetActive(true);
-	}
+    public void OnClickRegisterButton()
+    {
+        LoginPanel.SetActive(false);
+        RegisterPanel.SetActive(true);
+    }
+    public void OnClickGoToLoginButton()
+    {
+        LoginPanel.SetActive(true);
+        RegisterPanel.SetActive(false);
+    }
+    private void Init()
+    {
+        
+    }
+    // 회원가입
+    public void Register()
+    {
+        // 1. 아이디 입력을 확인한다.
+        string email = RegisterInputFields.IDInputField.text;
+        var emailSpecification = new AccountEmailSpecification();
+        if(!emailSpecification.IsSatisfiedBy(email))
+        {
+            throw new Exception(emailSpecification.ErrorMessage);
+            // RegisterInputFields.ResultText.text = "아이디를 입력해주세요.";
+        }
+        // 2. 닉네임 도메인 규칙을 확인한다.
+        string nickname = RegisterInputFields.NicknameInputField.text;
+        var nicknameSpecification = new AccountNicknameSpecification();
+        if (!nicknameSpecification.IsSatisfiedBy(nickname))
+        {
+            RegisterInputFields.ResultText.text = nicknameSpecification.ErrorMessage;
+            return;
+        }
+        // 3. 1차 비밀번호 입력을 확인한다.
+        string password = RegisterInputFields.PasswordInputField.text;
+        
+        var passwordSpecification = new AccountPasswordSpecification();
+        if (!passwordSpecification.IsSatisfiedBy(password))
+        {
+            RegisterInputFields.ResultText.text =passwordSpecification.ErrorMessage;
+            return;
+        }
+        // 4. 2차 비밀번호 입력을 확인하고, 1차 비밀번호 입력과 같은지 확인한다.
 
-	public void OnClickGoToLogin()
-	{
-		LoginPanel.SetActive(true);
-		ResisterPanel.SetActive(false);
-	}
+        string passwordConfirm = RegisterInputFields.PasswordConfirmInputField.text;
+        if (!passwordSpecification.IsSatisfiedBy(passwordConfirm))
+        {
+            RegisterInputFields.ResultText.text = passwordSpecification.ErrorMessage;
+            return;
+        }
+
+        if (password != passwordConfirm)
+        {
+            RegisterInputFields.ResultText.text = "비밀번호가 일치하지 않습니다.";
+            return;
+        }
+        // Result result = AccountManager.Instance.TryRegister(email, nickname, password);
+        // if (result.IsSuccess)
+        // {
+        //     OnClickGoToLoginButton();
+        //     RegisterInputFields.ResultText.text = "회원가입이 완료되었습니다."; 
+        // }
+        // else
+        // {
+        //     RegisterInputFields.ResultText.text = result.Message; 
+        // }
 
 
-	// 회원가입
-	public void Resister()
-	{
-		SignUpInputField.ResultText.text = "";
+        // 5. 로그인 창으로 돌아간다. (이 때 아이디는 자동 입력 되어있다.)'
+        LoginInputFields.IDInputField.text = email;
+        
+    }
 
-		// 1. 이메일 도메인 규칙을 확인한다.
-		string email = SignUpInputField.EmailInputField.text;
-		AccountEmailSpecification emailSpecification = new AccountEmailSpecification();
-		if (!emailSpecification.IsSatisfiedBy(email))
-		{
-			SignUpInputField.ResultText.text = emailSpecification.ErrorMessage;
-			return;
-		}
-		// 2. 닉네임 도메인 규칙을 확인한다.
-		string nickname = SignUpInputField.NicknameInputField.text;
-		AccountNicknameSpecification nicknameSpecification = new AccountNicknameSpecification();
-		if (!nicknameSpecification.IsSatisfiedBy(nickname))
-		{
-			SignUpInputField.ResultText.text = nicknameSpecification.ErrorMessage;
-			return;
-		}
+    
+    public void Login()
+    {
+        // 1. 아이디 입력을 확인한다.
+        string email = LoginInputFields.IDInputField.text;
+        var emailSpecification = new AccountEmailSpecification();
+        if (!emailSpecification.IsSatisfiedBy(email))
+        {
+            
+            LoginInputFields.ResultText.text = emailSpecification.ErrorMessage;
+            return;
+        }
+        // 2. 비밀번호 입력을 확인한다.
+        string password = LoginInputFields.PasswordInputField.text;
+        var passwordSpecification = new AccountPasswordSpecification();
+        if (!passwordSpecification.IsSatisfiedBy(password))
+        {
+            LoginInputFields.ResultText.text = passwordSpecification.ErrorMessage;
+            return;
+        }
+        
+        // 3. PlayerPrefs.Get을 이용해서 아이디와 비밀번호가 맞는지 확인한다.
+        // if (AccountManager.Instance.TryLogin(email, password))
+        // {
+        //     LoginInputFields.ResultText.text = "아이디와 비밀번호를 확인해주세요";
+        // }
+        // else
+        // {
+        //     SceneManager.LoadScene(1);   
+        // }
+        // string hashedPassword = PlayerPrefs.GetString(PREFIX + id);
+        // if (hashedPassword != Encryption(password + SALT))
+        // {
+        //     LoginInputFields.ResultText.text = "아이디와 비밀번호를 확인해주세요";
+        //     return;
+        // }
+        // // 4. 맞다면 로그인
+        // else
+        // {
+        //     LoginInputFields.ResultText.text = "로그인 성공";
+        //     // 로그인 성공 시 처리
+        //     // LoadingScene으로 이동
+    }
+    
+    // 아이디와 비밀번호 InputField 값이 바뀌었을 경우에만.
+    public void LoginCheck()
+    {
+        string id = LoginInputFields.IDInputField.text;
+        string password = LoginInputFields.PasswordInputField.text;
 
-		// 3. 비밀번호 도메인 규칙을 확인한다.
-		string pw = SignUpInputField.PasswordInputField.text;
-		AccountPasswordpecification passwordSpecification = new AccountPasswordpecification();
-		if (!passwordSpecification.IsSatisfiedBy(pw))
-		{
-			SignUpInputField.ResultText.text = passwordSpecification.ErrorMessage;
-			return;
-		}
-
-		string pwConfirm = SignUpInputField.PasswordConfirmInputField.text;
-		if (string.IsNullOrEmpty(pw) || string.IsNullOrEmpty(pwConfirm))
-		{
-			GameObject nullobj = string.IsNullOrEmpty(pw) ? SignUpInputField.PasswordInputField.gameObject : SignUpInputField.PasswordInputField.gameObject;
-			SignUpInputField.ResultText.text = "비밀번호와 확인을 입력해주세요.";
-
-		}
-		Result result = AccountManager.Instance.TryRegister(email, nickname, pw);
-		if (result.IsSuccess)
-		{
-			OnClickGoToLogin();
-		}
-		else
-		{
-			SignUpInputField.ResultText.text = result.Message;
-		}
-	}
-
-	public void Login()
-	{
-		LoginInputField.ResultText.text = "";
-		// 1. 아이디 입력을 확인한다.
-		string email = LoginInputField.EmailInputField.text;
-		AccountEmailSpecification emailSpecification = new AccountEmailSpecification();
-		if (!emailSpecification.IsSatisfiedBy(email))
-		{
-			LoginInputField.ResultText.text = emailSpecification.ErrorMessage;
-			return;
-		}
-		// 2. 비밀번호 입력을 확인한다.
-		string password = LoginInputField.PasswordInputField.text;
-		if (string.IsNullOrEmpty(password))
-		{
-			LoginInputField.ResultText.text = "비밀번호는 비어있을 수 없습니다";
-		}
-		// 3. 맞다면 로그인
-		if (AccountManager.Instance.TryLogin(email, password))
-		{
-			gameObject.SetActive(false);
-			Debug.Log("로그인 성공!");
-
-			SceneManager.LoadScene(1);
-		}
-	}
-
-	public void LoginCheck()
-	{
-		string email = LoginInputField.EmailInputField.text;
-		string password = LoginInputField.PasswordInputField.text;
-
-		LoginInputField.ConfirmButton.enabled = !(string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password));
-	}
+        LoginInputFields.ConfirmButton.enabled = !string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(password);
+    }
 }

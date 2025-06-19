@@ -1,7 +1,9 @@
 ﻿using Firebase.Firestore;
 public class Comment
 {
-	public readonly Account Account;
-	public readonly string Content;
-	public readonly Timestamp CommentTime;
+	public string Email;
+	public string PostID;
+	public string CommentId;
+	public string Content;
+	public Timestamp CommentTime;
 }
