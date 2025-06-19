@@ -16,5 +16,7 @@
 			Write.SetActive(false);
 			await PostManager.Instance.OpenComments();
 		}
+
+	
 	}
 

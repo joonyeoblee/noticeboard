@@ -33,4 +33,9 @@ public class UI_Post : MonoBehaviour
 		ContentTextUI.text = _post.Content;
 		LikeAndCommentTextUI.text = $"좋아요 {_post.Likes.Count}, 댓글 {_post.Comments.Count}";
 	}
+
+	public void OnClickModifyButton()
+	{
+		//event?.Invoke;
+	}
 }

@@ -1,6 +1,7 @@
 using Firebase.Auth;
 using Firebase.Firestore;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,9 @@ public class UI_PostWrite : MonoBehaviour
 		string Time = Timestamp.GetCurrentTimestamp().ToString();
 		Post post = new Post(accountDto.Email, accountDto.Nickname,$"{accountDto.Email}_{Time}",ContentInputField.text);
 		await PostManager.Instance.TryAddPost(post);
+		
+		gameObject.SetActive(false);
+		await PostManager.Instance.OpenComments();
 	}
 	
 }

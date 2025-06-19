@@ -12,7 +12,8 @@ public class UI_PostMenu : MonoBehaviour
 	AccountDTO account => AccountManager.Instance.CurrentAccount;
 
 	public GameObject[] LikeImage;
-
+	
+	private bool _isLiked = false;
 	public void Refresh(PostDTO post)
 	{
 		_post = post;
@@ -25,6 +26,7 @@ public class UI_PostMenu : MonoBehaviour
 			
 			LikeImage[0].SetActive(false);
 			LikeImage[1].SetActive(true);
+			_isLiked = true;
 		}
 		else
 		{
@@ -35,7 +37,7 @@ public class UI_PostMenu : MonoBehaviour
 	public async void Like()
 	{
 		string LikeId = Guid.NewGuid().ToString();
-
+		
 		Like like = new Like(account.Email, account.Nickname, _post.PostID, LikeId, (int)_targetType);
 		if (await PostManager.Instance.TryAddLike(like, _post.PostID))
 		{

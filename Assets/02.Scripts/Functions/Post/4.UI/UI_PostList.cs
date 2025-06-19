@@ -7,6 +7,9 @@ public class UI_PostList : MonoBehaviour
 	public GameObject UI_PostPrefab;
 	public GameObject UI_PostContainer;
 	public int limit = 3;
+	
+	List<PostDTO> postDtos => PostManager.Instance.Posts;
+	
 	public void Start()
 	{
 		PostManager.Instance.OnDataChanged += Refresh;
@@ -14,27 +17,22 @@ public class UI_PostList : MonoBehaviour
 
 	public void Refresh()
 	{
-		// 기존 UI 요소 제거
-		foreach (var uiPost in _ui_Posts)
-		{
-			if (uiPost != null)
-				Destroy(uiPost.gameObject);
-		}
-		_ui_Posts.Clear(); // 리스트도 초기화
+		int postCount = postDtos?.Count ?? 0;
+		int count = Mathf.Min(postCount, limit);
 
-		// 새로 생성
-		List<PostDTO> postDtos = PostManager.Instance.Posts;
-		int Count = postDtos.Count < limit ? postDtos.Count : limit;
-
-		for (int i = 0; i < Count; i++)
+		for (int i = 0; i < limit; i++)
 		{
-			GameObject ui_Post = Instantiate(UI_PostPrefab, UI_PostContainer.transform);
-			var uiPostComponent = ui_Post.GetComponent<UI_Post>();
-			_ui_Posts.Add(uiPostComponent);
-			uiPostComponent.Refresh(postDtos[i]);
+			if (i < count)
+			{
+				_ui_Posts[i].gameObject.SetActive(true);
+				_ui_Posts[i].Refresh(postDtos[i]);
+			}
+			else
+			{
+				_ui_Posts[i].gameObject.SetActive(false);
+			}
 		}
 
-		// 레이아웃 강제 갱신
 		LayoutRebuilder.ForceRebuildLayoutImmediate(UI_PostContainer.GetComponent<RectTransform>());
 	}
 
