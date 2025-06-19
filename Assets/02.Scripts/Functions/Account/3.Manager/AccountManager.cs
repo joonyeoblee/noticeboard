@@ -1,15 +1,51 @@
 using System;
+using Firebase.Auth;
+using Firebase.Extensions;
+using Firebase.Firestore;
 using UnityEngine;
 public class AccountManager : Singleton<AccountManager>
 {
+    private AccountRepository _repository;
+
+
+    private async void Start()
+    {
+        await FirebaseConnect.Instance.Initialization;
+        
+        _repository = new AccountRepository( FirebaseConnect.Instance.Db, FirebaseConnect.Instance.Auth);
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     private Account _myAccount;
 
     // public AccountDTO CurrentAccount => _myAccount.ToDTO();
     public AccountDTO CurrentAccount;
     private const string SALT = "903872727";
 
-    private readonly AccountRepository _repository = new AccountRepository();
 
+    public void Register(string email, string nickname, string password)
+    {
+        FirebaseConnect.Instance.Auth.CreateUserWithEmailAndPasswordAsync(email, password).ContinueWithOnMainThread(task => {
+            if (task.IsCanceled || task.IsFaulted) {
+                Debug.LogError($"회원가입에 실패했습니다.{task.Exception.Message}");
+                return;
+            }
+            
+            Firebase.Auth.AuthResult result = task.Result;
+            Debug.LogFormat("회원가입에 성공했습니다. {0} ({1})",
+                result.User.DisplayName, result.User.UserId);
+            return;
+        });
+    }
     // public Result TryRegister(string email, string nickname, string password)
     // {
     //     AccountSaveData accountDto = _repository.Find(email);

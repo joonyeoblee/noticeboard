@@ -9,8 +9,6 @@ using UnityEngine;
 public class FirebaseTest : MonoBehaviour
 {
     private FirebaseApp _app;
-    private FirebaseAuth _auth;
-    private FirebaseFirestore _db;
     
     public static string EMAIL = $"rlarudgh998@skkukdp.re.kr";
     public static string PASSWORD = "123456";
@@ -24,14 +22,12 @@ public class FirebaseTest : MonoBehaviour
     {
         // ContinueWith는 멀티나 메인 쓰레드에서도 가능하지만 MonoBehavior를 상속받는 경우는 아래 함수를 사용하자
         // Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
-        Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
+        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task => {
             var dependencyStatus = task.Result;
-            if (dependencyStatus == Firebase.DependencyStatus.Available) 
+            if (dependencyStatus == DependencyStatus.Available) 
             {
                 Debug.Log("파이어베이스 연결에 성공했습니다.");
                 _app = FirebaseApp.DefaultInstance;
-                _auth = FirebaseAuth.DefaultInstance;
-                _db = FirebaseFirestore.DefaultInstance;
                 
                 Login();
             } 
@@ -43,7 +39,7 @@ public class FirebaseTest : MonoBehaviour
     }
     private void Register()
     {
-        _auth.CreateUserWithEmailAndPasswordAsync(EMAIL, PASSWORD).ContinueWithOnMainThread(task => {
+        FirebaseConnect.Instance.Auth.CreateUserWithEmailAndPasswordAsync(EMAIL, PASSWORD).ContinueWithOnMainThread(task => {
             if (task.IsCanceled || task.IsFaulted) {
                 Debug.LogError($"회원가입에 실패했습니다.{task.Exception.Message}");
                 return;
@@ -57,7 +53,7 @@ public class FirebaseTest : MonoBehaviour
     }
     private void Login()
     {
-        _auth.SignInWithEmailAndPasswordAsync(EMAIL, PASSWORD).ContinueWithOnMainThread(task => {
+        FirebaseConnect.Instance.Auth.SignInWithEmailAndPasswordAsync(EMAIL, PASSWORD).ContinueWithOnMainThread(task => {
             if (task.IsCanceled || task.IsFaulted) {
                 Debug.LogError("로그인이 실패했습니다.");
                 return;
@@ -74,7 +70,7 @@ public class FirebaseTest : MonoBehaviour
 
     private void NicknameChange()
     {
-        var user = _auth.CurrentUser;
+        var user = FirebaseConnect.Instance.Auth.CurrentUser;
         if (user == null) return;
 
         var profile = new UserProfile
@@ -93,7 +89,7 @@ public class FirebaseTest : MonoBehaviour
 
     private void GetProfile()
     {
-        var user = _auth.CurrentUser;
+        var user = FirebaseConnect.Instance.Auth.CurrentUser;
         if (user == null) return;
         
         string nickname = user.DisplayName;
@@ -112,14 +108,14 @@ public class FirebaseTest : MonoBehaviour
             //     { "Nickname",rankData.Nickname},
             //     { "Score",rankData.Score }
             // };
-            // _db.Collection("rankings").AddAsync(rankDict).ContinueWithOnMainThread(task =>
+            // FirebaseConnect.Instance.Db.Collection("rankings").AddAsync(rankDict).ContinueWithOnMainThread(task =>
             // {
             //     if (task.IsCanceled || task.IsFaulted)
             //     {
             //         Debug.LogError($"데이터 추가에 실패했습니다.. {task.Exception.Message}");
             //     }
             // });
-            // _db.Collection("rankings").Document(rankData.Email).SetAsync(rankDict).ContinueWithOnMainThread(task =>
+            // FirebaseConnect.Instance.Db.Collection("rankings").Document(rankData.Email).SetAsync(rankDict).ContinueWithOnMainThread(task =>
             // {
             //     Debug.Log(String.Format("데이터가 성공적으로 저장되었습니다 ID Nickname {0}.", task.Id));
             // });
@@ -127,7 +123,7 @@ public class FirebaseTest : MonoBehaviour
     }
     private void GetMyRanking()
     {
-        DocumentReference docRef = _db.Collection("rankings").Document(EMAIL);
+        DocumentReference docRef = FirebaseConnect.Instance.Db.Collection("rankings").Document(EMAIL);
         docRef.GetSnapshotAsync().ContinueWithOnMainThread(task =>
         {
             var snapshot = task.Result;
@@ -149,7 +145,7 @@ public class FirebaseTest : MonoBehaviour
     private void GetRankings()
     {
         // 쿼리(질의)란 컬렉션으로부터 데이터를 가져올 때 어떻게 가져와라고 쓰는 명령문 
-        Query capitalQuery = _db.Collection("rankings").OrderByDescending("Score");
+        Query capitalQuery = FirebaseConnect.Instance.Db.Collection("rankings").OrderByDescending("Score");
         capitalQuery.GetSnapshotAsync().ContinueWithOnMainThread(task => 
         {
             QuerySnapshot capitalQuerySnapshot = task.Result;
