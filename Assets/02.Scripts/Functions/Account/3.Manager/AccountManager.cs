@@ -1,11 +1,9 @@
-using System;
-using UnityEngine;
 public class AccountManager : Singleton<AccountManager>
 {
-    private Account _myAccount;
+    private readonly Account _myAccount = new Account("asd@asd.com", "형이야", "123123123");
 
     // public AccountDTO CurrentAccount => _myAccount.ToDTO();
-    public AccountDTO CurrentAccount;
+    public AccountDTO CurrentAccount => _myAccount.ToDTO();
     private const string SALT = "903872727";
 
     private readonly AccountRepository _repository = new AccountRepository();

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using _02.Scripts.Functions.Post._1.Domain;
 using UnityEngine;
 public class AccountRepository 
 {
