@@ -49,9 +49,8 @@ public class PostManager : Singleton<PostManager>
 		}
 	}
 
-	public async void OpenComnments()
+	public async Task OpenComments()
 	{
-		Comments.SetActive(true);
-		await _repository.GetPosts(0, 5);
+		await _repository.GetPosts(0, 3);
 	}
 }

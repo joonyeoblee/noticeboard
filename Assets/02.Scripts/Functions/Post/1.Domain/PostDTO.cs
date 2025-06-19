@@ -16,11 +16,11 @@ public class PostDTO
 	[FirestoreProperty]
 	public int ViewCount { get; private set; }
 	[FirestoreProperty]
-	public Timestamp PostTime { get; }
+	public Timestamp PostTime { get; private set;}
 	[FirestoreProperty]
-	public List<LikeDTO> Likes { get; } = new List<LikeDTO>(); // 좋아요 리스트 추가
+	public List<LikeDTO> Likes { get; private set;} = new List<LikeDTO>(); // 좋아요 리스트 추가
 	[FirestoreProperty]
-	public List<CommentDTO> Comments { get; } = new List<CommentDTO>(); // 좋아요 리스트 추가
+	public List<CommentDTO> Comments { get; private set;} = new List<CommentDTO>(); // 좋아요 리스트 추가
 
 	// 좋아요 추가하는 메소드
 	public void AddLike(LikeDTO like)

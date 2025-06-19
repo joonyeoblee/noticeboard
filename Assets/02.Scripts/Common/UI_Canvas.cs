@@ -11,9 +11,10 @@
 			Write.SetActive(true);
 			
 		}
-		public void CloseWrite()
+		public async void CloseWrite()
 		{
 			Write.SetActive(false);
+			await PostManager.Instance.OpenComments();
 		}
 	}
 

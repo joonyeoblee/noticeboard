@@ -2,8 +2,9 @@
 using UnityEngine;
 public class UI_PostList : MonoBehaviour
 {
-	public List<UI_Post> UI_Posts;
-
+	private List<UI_Post> _ui_Posts;
+	public GameObject UI_PostPrefab;
+	public int limit = 3;
 	public void Start()
 	{
 		PostManager.Instance.OnDataChanged += Refresh;
@@ -11,8 +12,9 @@ public class UI_PostList : MonoBehaviour
 
 	public void Refresh()
 	{
-		for (int i = 0; i < UI_Posts.Count; i++)
+		for (int i = 0; i < limit; i++)
 		{
+			
 		}
 	}
 }
