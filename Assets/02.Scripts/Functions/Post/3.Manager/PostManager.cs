@@ -48,6 +48,20 @@ public class PostManager : Singleton<PostManager>
 			return false;
 		}
 	}
+	public async Task<bool> TryUpdatePost(Post post)
+	{
+		try
+		{
+			await _repository.UpdatePost(post.ToDto());
+			OnDataChanged?.Invoke();
+			return true;
+		}
+		catch (Exception e)
+		{
+			Debug.LogError($"Modify failed: {e.Message}");
+			return false;
+		}
+	}
 
 	public async Task OpenComments()
 	{
