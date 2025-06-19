@@ -1,52 +1,51 @@
+using System;
+using System.Threading.Tasks;
+using Firebase.Auth;
+using Firebase.Extensions;
+using Firebase.Firestore;
+using UnityEngine;
 public class AccountManager : Singleton<AccountManager>
 {
-    private readonly Account _myAccount = new Account("asd@asd.com", "형이야", "123123123");
+    private AccountRepository _repository;
 
-    // public AccountDTO CurrentAccount => _myAccount.ToDTO();
-    public AccountDTO CurrentAccount => _myAccount.ToDTO();
-    private const string SALT = "903872727";
+    public AccountDTO CurrentAccount = new AccountDTO("123@123123.com","어쩔껀데");
 
-    private readonly AccountRepository _repository = new AccountRepository();
+    private async void Start()
+    {
+        await FirebaseConnect.Instance.Initialization;
+        
+        _repository = new AccountRepository( FirebaseConnect.Instance.Db, FirebaseConnect.Instance.Auth);
+        
+    }
 
-    // public Result TryRegister(string email, string nickname, string password)
-    // {
-    //     AccountSaveData accountDto = _repository.Find(email);
-    //     if (accountDto != null)
-    //     {
-    //         return new Result(false, "이미 가입한 이메일입니다");
-    //     }
-    //
-    //     // TODO: 매니저로 빼야함
-    //
-    //     string encrypted = CryptoUtil.EncryptAES(password, SALT);
-    //     Account account = new Account(email, nickname, encrypted);
-    //
-    //     // 레포 저장
-    //     _repository.Save(account.ToDTO());
-    //
-    //     return new Result(true);
-    // }
-    // public bool TryLogin(string email, string password)
-    // {
-    //     string encrypted = CryptoUtil.EncryptAES(password, SALT);
-    //
-    //     AccountSaveData accountDto = _repository.Find(email);
-    //     if (accountDto == null)
-    //     {
-    //         Debug.Log($"[AccountManager] Login failed: Email not found for {email}");
-    //         return false;
-    //     }
-    //     if (accountDto.Password == encrypted)
-    //     {
-    //         _myAccount = new Account(accountDto.Email, accountDto.Nickname, accountDto.Password);
-    //         CurrentAccount = _myAccount.ToDTO();
-    //
-    //         Debug.Log($"[AccountManager] Login successful for {email}. Loading attendance data.");
-    //
-    //
-    //         return true;
-    //     }
-    //     Debug.Log($"[AccountManager] Login failed: Incorrect password for {email}");
-    //     return false;
-    // }
+    public async Task Login(string email, string password)
+    {
+        try
+        {
+            await _repository.LoginAsync(email, password);
+            Debug.Log($"[AccountManager] Login 성공 : {email}");
+
+            // FirebaseUser에서 추가 정보 가져와서 Account 객체 초기화 (선택 사항)
+            var user = FirebaseConnect.Instance.Auth.CurrentUser;
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[AccountManager] Login 실패 : {ex.Message}");
+            throw; // 호출자가 처리할 수 있도록 예외 재던짐
+        }
+    }
+    public async Task Register(string email, string nickname, string password)
+    {
+        try
+        {
+            CurrentAccount = await _repository.RegisterAsync(email, nickname, password);
+
+            Debug.Log($"[AccountManager] Register 완료: {email}");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[AccountManager] Register 실패: {ex.Message}");
+            throw;
+        }
+    }
 }

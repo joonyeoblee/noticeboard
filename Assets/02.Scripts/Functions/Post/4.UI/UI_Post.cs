@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 public class UI_Post : MonoBehaviour
 {
 	public List<UI_PostMenu> UI_PostMenus = new List<UI_PostMenu>();
+	public TextMeshProUGUI PosterName;
+	
 	private Post Post;
 	private void Start()
 	{

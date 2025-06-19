@@ -8,14 +8,16 @@ public class PostManager : Singleton<PostManager>
 	private List<PostDTO> _posts;
 	public List<PostDTO> Posts => _posts;
 	public Action OnDataChanged;
+
+	public GameObject Comments;
 	private async void Start()
 	{
 		await FirebaseConnect.Instance.Initialization;
 
 		_repository = new PostRepository(FirebaseConnect.Instance.Db);
-		_posts = await _repository.LoadPosts();
-
-		Debug.Log(_posts[0].Likes[0].Email);
+		
+		// _posts = await _repository.LoadPosts();
+		// Debug.Log(_posts[0].Likes[0].Email);
 	}
 
 	public async Task TryAddPost(Post post)
@@ -31,7 +33,7 @@ public class PostManager : Singleton<PostManager>
 			throw;
 		}
 	}
-
+	
 	public async Task<bool> TryAddLike(Like like)
 	{
 		try
@@ -45,5 +47,10 @@ public class PostManager : Singleton<PostManager>
 			Debug.LogError($"Upload failed: {e.Message}");
 			return false;
 		}
+	}
+
+	public async Task OpenComments()
+	{
+		await _repository.GetPosts(0, 3);
 	}
 }
