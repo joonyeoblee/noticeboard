@@ -21,11 +21,11 @@ public class PostManager : Singleton<PostManager>
 		AccountDTO _accountDto = AccountManager.Instance.CurrentAccount;
 	}
 
-	public async Task TryAddPost(Post post)
+	public async Task TryAddPost(PostDTO postDto)
 	{
 		try
 		{
-			await _repository.AddPost(post.ToDto());
+			await _repository.AddPost(postDto);
 			OnDataChanged?.Invoke();
 		}
 		catch (Exception e)
