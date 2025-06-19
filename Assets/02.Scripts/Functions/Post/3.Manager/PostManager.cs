@@ -1,12 +1,49 @@
-﻿public class PostManager : Singleton<PostManager>
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine;
+public class PostManager : Singleton<PostManager>
 {
 	private PostRepository _repository;
-
+	private List<PostDTO> _posts;
+	public List<PostDTO> Posts => _posts;
+	public Action OnDataChanged;
 	private async void Start()
 	{
 		await FirebaseConnect.Instance.Initialization;
 
-		PostRepository repo = new PostRepository(FirebaseConnect.Instance.Db);
-		await repo.LoadPosts();
+		_repository = new PostRepository(FirebaseConnect.Instance.Db);
+		_posts = await _repository.LoadPosts();
+
+		Debug.Log(_posts[0].Likes[0].Email);
+	}
+
+	public async Task TryAddPost(Post post)
+	{
+		try
+		{
+			await _repository.AddPost(post.ToDto());
+			OnDataChanged?.Invoke();
+		}
+		catch (Exception e)
+		{
+			Debug.LogError($"Upload failed: {e.Message}");
+			throw;
+		}
+	}
+
+	public async Task<bool> TryAddLike(Like like)
+	{
+		try
+		{
+			await _repository.Addlike(like.ToDto());
+			OnDataChanged?.Invoke();
+			return true;
+		}
+		catch (Exception e)
+		{
+			Debug.LogError($"Upload failed: {e.Message}");
+			return false;
+		}
 	}
 }

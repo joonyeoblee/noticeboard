@@ -11,10 +11,8 @@ public class Post
 	public Timestamp PostTime { get; }
 	public Post() { }
 
-
-	// 댓글 리스트 
-	public List<Comment> Comments = new List<Comment>();
-	// 어카운트
+	public List<LikeDTO> Likes { get; } = new List<LikeDTO>(); // 좋아요 리스트 추가
+	public List<CommentDTO> Comments { get; } = new List<CommentDTO>(); // 좋아요 리스트 추가
 
 	public Post(string email, string nickname, string postID, string content, int like = 0, int viewCount = 0)
 		: this(email, nickname, postID, content, like, viewCount, Timestamp.GetCurrentTimestamp())
@@ -35,4 +33,13 @@ public class Post
 	{
 		return new PostDTO(Email, Nickname, PostID, Content, Like, ViewCount, PostTime);
 	}
+
+	// public void AddLike(Like like)
+	// {
+	// 	Likes.Add(like);
+	// }
+	// public void AddComment(Comment comment)
+	// {
+	// 	Comments.Add(comment);
+	// }
 }

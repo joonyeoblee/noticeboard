@@ -11,37 +11,34 @@ public class PostRepository
 	{
 		_db = db;
 	}
-	public async Task<List<Post>> LoadPosts()
+	public async Task<List<PostDTO>> LoadPosts()
 	{
-		List<Post> posts = new List<Post>();
-
+		List<PostDTO> postDtos = new List<PostDTO>();
 		try
 		{
-			// rankings 컬렉션의 모든 문서를 가져오는 쿼리
-			Query allRankingsQuery = _db.Collection("Posts");
+			// 포스트 컬렉션을 불러옴
+			Query allPostsQuery = _db.Collection("Post");
 
-			// await으로 결과를 비동기로 받아옴
-			QuerySnapshot allRankingsSnapshot = await allRankingsQuery.GetSnapshotAsync();
+			QuerySnapshot allPostsSnapshot = await allPostsQuery.GetSnapshotAsync();
 
-			foreach (DocumentSnapshot documentSnapshot in allRankingsSnapshot.Documents)
+			foreach (DocumentSnapshot documentSnapshot in allPostsSnapshot.Documents)
 			{
 				if (documentSnapshot.Exists)
 				{
 					// 문서 데이터를 커스텀 객체 Post로 변환
-					Post post = documentSnapshot.ConvertTo<Post>();
-					posts.Add(post);
+					PostDTO postDto = documentSnapshot.ConvertTo<PostDTO>();
+					postDtos.Add(postDto);
 				}
 				else
 				{
 					Debug.LogWarning($"Document {documentSnapshot.Id} does not exist!");
 				}
-				// Debug.Log($"Document data for {documentSnapshot.Id} document:");
-				//
-				// Dictionary<string, object> postData = documentSnapshot.ToDictionary();
-				// Post post = new Post(documentSnapshot.Id, postData);
-
-				return posts;
 			}
+
+
+
+			return postDtos;
+
 		}
 		catch (Exception e)
 		{
@@ -50,9 +47,55 @@ public class PostRepository
 		return null;
 	}
 
-	public async Task SavePosts(List<Post> posts)
+	public async Task AddPost(PostDTO postDto)
+	{
+		DocumentReference docRef = _db.Collection("Post").Document(postDto.PostID);
+		await docRef.SetAsync(postDto);
+	}
+	public async Task<List<PostDTO>> GetPosts(int start, int limit)
+	{
+
+		return null;
+	}
+	public async Task<PostDTO> GetPost(string postId)
+	{
+		PostDTO postDto = null;
+		try
+		{
+			DocumentReference docRef = _db.Collection("Post").Document(postId);
+			DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+
+			if (snapshot.Exists)
+			{
+				postDto = snapshot.ConvertTo<PostDTO>();
+			}
+			else
+			{
+				Debug.LogWarning($"Document {snapshot.Id} does not exist!");
+			}
+
+			return postDto;
+
+		}
+		catch (Exception e)
+		{
+			Debug.LogError($"데이터 로딩 중 오류 발생: {e.Message}");
+		}
+		return null;
+	}
+	public async Task UpdatePost(PostDTO post)
+	{
+
+	}
+	public async Task DeletePost(string postId)
 	{
 
 	}
 
+
+	public async Task Addlike(LikeDTO likeDto)
+	{
+		DocumentReference docRef = _db.Collection("Like").Document(likeDto.LikeID);
+		await docRef.SetAsync(likeDto);
+	}
 }

@@ -15,5 +15,19 @@ public class LikeDTO
 	public int TargetType{ get; set; }
 	
 	[FirestoreProperty]
-	public bool IsLiked{ get; set; }
+	public string LikeID { get; set; }
+
+	public LikeDTO()
+	{
+
+	}
+
+	public LikeDTO(string email, string nickname, string targetID, string likeID, int targetType)
+	{
+		Email = email;
+		Nickname = nickname;
+		TargetID = targetID;
+		LikeID = likeID;
+		TargetType = targetType;
+	}
 }
