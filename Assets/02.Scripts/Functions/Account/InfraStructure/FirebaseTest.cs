@@ -95,7 +95,7 @@ public class FirebaseTest : MonoBehaviour
         string nickname = user.DisplayName;
         string email = user.Email;
 
-        Account account = new Account(email, nickname, PASSWORD);
+        Account account = new Account(email, nickname);
     }
     
     private void AddRanking()
