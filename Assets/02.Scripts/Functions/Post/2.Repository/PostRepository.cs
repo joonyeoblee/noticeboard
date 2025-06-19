@@ -20,9 +20,34 @@ public class PostRepository
 	public async Task<List<PostDTO>> GetPosts(int start, int limit)
 	{
 		List<PostDTO> postDtos = new List<PostDTO>();
-		
-		return null;
+
+		try
+		{
+			// "PostTime" 기준으로 내림차순 정렬하여 최신 게시글부터 가져옴
+			Query query = _db.Collection("Post")
+				.OrderByDescending("PostTime")
+				.Limit(start + limit);
+
+			QuerySnapshot snapshot = await query.GetSnapshotAsync();
+
+			// start부터 limit 개수만큼 리스트에 추가
+			for (int i = start; i < Math.Min(start + limit, snapshot.Count); i++)
+			{
+				DocumentSnapshot doc = snapshot[i];
+				PostDTO postDto = doc.ConvertTo<PostDTO>();
+				postDtos.Add(postDto);
+				Debug.Log(postDto.PostID);
+			}
+		}
+		catch (System.Exception e)
+		{
+			UnityEngine.Debug.LogError($"Error fetching posts: {e.Message}");
+		}
+
+		return postDtos;
 	}
+
+
 	public async Task<PostDTO> GetPost(string postId)
 	{
 		PostDTO postDto = null;
