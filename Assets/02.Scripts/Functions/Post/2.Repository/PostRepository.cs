@@ -115,10 +115,25 @@ public class PostRepository
 	}
 
 
-
-	public async Task Addlike(LikeDTO likeDto)
+	public async Task AddLike(LikeDTO likeDto, string postId)
 	{
-		DocumentReference docRef = _db.Collection("Like").Document(likeDto.LikeID);
-		await docRef.SetAsync(likeDto);
+		DocumentReference docRef = _db.Collection("Post").Document(postId);
+
+		DocumentSnapshot snapshot = await docRef.GetSnapshotAsync();
+		if (snapshot.Exists)
+		{
+			// Post 객체 가져오기
+			PostDTO post = snapshot.ConvertTo<PostDTO>();
+
+			// 좋아요 추가
+			post.AddLike(likeDto);
+	
+			// 업데이트
+			await docRef.SetAsync(post);
+		}
+		else
+		{
+			throw new Exception("Post not found");
+		}
 	}
 }

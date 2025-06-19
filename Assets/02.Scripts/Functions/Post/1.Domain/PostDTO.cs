@@ -26,6 +26,7 @@ public class PostDTO
 	public void AddLike(LikeDTO like)
 	{
 		Likes.Add(like);
+		Like = Likes.Count;
 	}
 
 	public void AddComment(CommentDTO comment)

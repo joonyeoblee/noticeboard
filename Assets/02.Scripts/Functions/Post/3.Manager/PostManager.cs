@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 public class PostManager : Singleton<PostManager>
@@ -8,16 +9,16 @@ public class PostManager : Singleton<PostManager>
 	private List<PostDTO> _posts;
 	public List<PostDTO> Posts => _posts;
 	public Action OnDataChanged;
-
+	
+	public LikeDTO likeDto;
+	
 	public GameObject Comments;
 	private async void Start()
 	{
 		await FirebaseConnect.Instance.Initialization;
 
 		_repository = new PostRepository(FirebaseConnect.Instance.Db);
-		
-		// _posts = await _repository.LoadPosts();
-		// Debug.Log(_posts[0].Likes[0].Email);
+		AccountDTO _accountDto = AccountManager.Instance.CurrentAccount;
 	}
 
 	public async Task TryAddPost(Post post)
@@ -34,11 +35,18 @@ public class PostManager : Singleton<PostManager>
 		}
 	}
 	
-	public async Task<bool> TryAddLike(Like like)
+	public async Task<bool> TryAddLike(Like like, string postId)
 	{
 		try
 		{
-			await _repository.Addlike(like.ToDto());
+			var post = _posts.FirstOrDefault(p => p.PostID == postId);
+			if (post != null)
+			{
+				post.AddLike(like.ToDto());
+				OnDataChanged?.Invoke(); // 즉시 UI 반영
+			}
+
+			await _repository.AddLike(like.ToDto(), postId);
 			OnDataChanged?.Invoke();
 			return true;
 		}
@@ -65,6 +73,8 @@ public class PostManager : Singleton<PostManager>
 
 	public async Task OpenComments()
 	{
-		await _repository.GetPosts(0, 3);
+		_posts = await _repository.GetPosts(0, 3);
+		OnDataChanged?.Invoke();
 	}
+
 }
