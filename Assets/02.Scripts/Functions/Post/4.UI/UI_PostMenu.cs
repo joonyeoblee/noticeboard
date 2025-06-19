@@ -9,7 +9,7 @@ public class UI_PostMenu : MonoBehaviour
 	{
 		_post = post;
 	}
-	public async Task Like()
+	public async void Like()
 	{
 		AccountDTO account = AccountManager.Instance.CurrentAccount;
 		string LikeId = Guid.NewGuid().ToString();
@@ -22,4 +22,5 @@ public class UI_PostMenu : MonoBehaviour
 
 		// 실패 알람
 	}
+	
 }

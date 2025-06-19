@@ -19,8 +19,8 @@ public class LikeDTO
 
 	public LikeDTO()
 	{
-
-	}
+		
+	}	
 
 	public LikeDTO(string email, string nickname, string targetID, string likeID, int targetType)
 	{

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Firebase.Firestore;
 public class Post
 {
@@ -21,6 +22,37 @@ public class Post
 
 	public Post(string email, string nickname, string postID, string content, int like, int viewCount, Timestamp postTime)
 	{
+		AccountEmailSpecification accountEmailSpecification = new AccountEmailSpecification();
+		if (!accountEmailSpecification.IsSatisfiedBy(email))
+		{
+			throw new Exception(accountEmailSpecification.ErrorMessage);
+		}
+		
+		AccountNicknameSpecification accountNicknameSpecification = new AccountNicknameSpecification();
+		if (!accountNicknameSpecification.IsSatisfiedBy(nickname))
+		{
+			throw new Exception(accountNicknameSpecification.ErrorMessage);
+		}
+
+		if (string.IsNullOrEmpty(postID))
+		{
+			throw new Exception("PostID는 비어있을 수 없습니다");
+		}
+
+		if (string.IsNullOrEmpty(content))
+		{
+			throw new Exception("content은 비어있을 수 없습니다");
+		}
+
+		if (like < 0)
+		{
+			throw new Exception("like수는 0보다 작을 수 없습니다");
+		}
+		
+		if (viewCount < 0)
+		{
+			throw new Exception("viewCount는 0보다 작을 수 없습니다");
+		}
 		Email = email;
 		Nickname = nickname;
 		PostID = postID;
@@ -34,12 +66,12 @@ public class Post
 		return new PostDTO(Email, Nickname, PostID, Content, Like, ViewCount, PostTime);
 	}
 
-	// public void AddLike(Like like)
-	// {
-	// 	Likes.Add(like);
-	// }
-	// public void AddComment(Comment comment)
-	// {
-	// 	Comments.Add(comment);
-	// }
+	public void AddLike(LikeDTO likeDto)
+	{
+		Likes.Add(likeDto);
+	}
+	public void AddComment(CommentDTO commentDto)
+	{
+		Comments.Add(commentDto);
+	}
 }

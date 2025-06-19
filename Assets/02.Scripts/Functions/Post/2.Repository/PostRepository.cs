@@ -11,41 +11,6 @@ public class PostRepository
 	{
 		_db = db;
 	}
-	public async Task<List<PostDTO>> LoadPosts()
-	{
-		List<PostDTO> postDtos = new List<PostDTO>();
-		try
-		{
-			// 포스트 컬렉션을 불러옴
-			Query allPostsQuery = _db.Collection("Post");
-
-			QuerySnapshot allPostsSnapshot = await allPostsQuery.GetSnapshotAsync();
-
-			foreach (DocumentSnapshot documentSnapshot in allPostsSnapshot.Documents)
-			{
-				if (documentSnapshot.Exists)
-				{
-					// 문서 데이터를 커스텀 객체 Post로 변환
-					PostDTO postDto = documentSnapshot.ConvertTo<PostDTO>();
-					postDtos.Add(postDto);
-				}
-				else
-				{
-					Debug.LogWarning($"Document {documentSnapshot.Id} does not exist!");
-				}
-			}
-
-
-
-			return postDtos;
-
-		}
-		catch (Exception e)
-		{
-			Debug.LogError($"데이터 로딩 중 오류 발생: {e.Message}");
-		}
-		return null;
-	}
 
 	public async Task AddPost(PostDTO postDto)
 	{
@@ -54,7 +19,8 @@ public class PostRepository
 	}
 	public async Task<List<PostDTO>> GetPosts(int start, int limit)
 	{
-
+		List<PostDTO> postDtos = new List<PostDTO>();
+		
 		return null;
 	}
 	public async Task<PostDTO> GetPost(string postId)
