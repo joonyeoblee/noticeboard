@@ -25,17 +25,27 @@ public class PostRepository
 
 			foreach (DocumentSnapshot documentSnapshot in allRankingsSnapshot.Documents)
 			{
-				Debug.Log($"Document data for {documentSnapshot.Id} document:");
-
-				Dictionary<string, object> postData = documentSnapshot.ToDictionary();
-				Post post = new Post(documentSnapshot.Id, postData);
+				if (documentSnapshot.Exists)
+				{
+					// 문서 데이터를 커스텀 객체 Post로 변환
+					Post post = documentSnapshot.ConvertTo<Post>();
+					posts.Add(post);
+				}
+				else
+				{
+					Debug.LogWarning($"Document {documentSnapshot.Id} does not exist!");
+				}
+				// Debug.Log($"Document data for {documentSnapshot.Id} document:");
+				//
+				// Dictionary<string, object> postData = documentSnapshot.ToDictionary();
+				// Post post = new Post(documentSnapshot.Id, postData);
 
 				return posts;
 			}
 		}
 		catch (Exception e)
 		{
-			Debug.LogError($"랭킹 데이터 로딩 중 오류 발생: {e.Message}");
+			Debug.LogError($"데이터 로딩 중 오류 발생: {e.Message}");
 		}
 		return null;
 	}

@@ -1,4 +1,5 @@
-﻿public enum ETargetType
+﻿using Firebase.Firestore;
+public enum ETargetType
 {
 	Post = 0,
 	Comment = 1,
@@ -6,12 +7,17 @@
 	Count
 }
 
-
+[FirestoreData]
 public class Like
 {
-	public readonly string Email;
-	public readonly string Nickname;
-	public readonly string TargetID;
-	public readonly ETargetType TargetType;
-	public readonly bool IsLiked;
+	[FirestoreProperty]
+	public string Email { get; set; }
+	[FirestoreProperty]
+	public string Nickname { get; set; }
+	[FirestoreProperty]
+	public string TargetID { get; set; }
+	[FirestoreProperty]
+	public int TargetType { get; set; }
+	[FirestoreProperty]
+	public bool IsLiked { get; set; }
 }

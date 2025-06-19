@@ -1,35 +1,26 @@
 ﻿using System.Collections.Generic;
 using Firebase.Firestore;
+[FirestoreData]
 public class Post
 {
-	public readonly Account Account;
-	public readonly string PostID;
-	public readonly string Content;
-	public readonly int Like;
-	public readonly int ViewCount;
-	public readonly Timestamp PostTime;
+	[FirestoreProperty]
+	public string Email { get; set; }
+	[FirestoreProperty]
+	public string Nickname { get; set; }
+	[FirestoreProperty]
+	public string PostID { get; set; }
+	[FirestoreProperty]
+	public string Content { get; set; }
+	[FirestoreProperty]
+	public int Like { get; set; }
+	[FirestoreProperty]
+	public int ViewCount { get; set; }
+	[FirestoreProperty]
+	public Timestamp PostTime { get; set; }
 
 	// 댓글 리스트 
 	public List<Comment> Comments = new List<Comment>();
 	// 어카운트
-	public Post(string content, int like, int viewCount, Timestamp postTime)
-	{
-		Content = content;
-		Like = like;
-		ViewCount = viewCount;
-		PostTime = postTime;
-	}
+	
 
-	public Post(string id, Dictionary<string, object> data)
-	{
-		PostID = id;
-		if (data.TryGetValue("content", out object content)) Content = content.ToString();
-		if (data.TryGetValue("Like", out object like)) Like = int.Parse(like.ToString());
-		if (data.TryGetValue("ViewCount", out object viewCount)) ViewCount = int.Parse(viewCount.ToString());
-		if (data.TryGetValue("PostTime", out object postTime) && postTime is Timestamp timestamp)
-		{
-			PostTime = timestamp;
-		}
-
-	}
 }

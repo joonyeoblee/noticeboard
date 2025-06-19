@@ -1,9 +1,14 @@
 using System;
+using Firebase.Firestore;
+[FirestoreData]
 public class Account
 {
-    public readonly string Email;
-    public readonly string Nickname;
-    public readonly string Password;
+    [FirestoreProperty]
+    public string Email { get; set; }
+    [FirestoreProperty]
+    public string Nickname { get; set; }
+    [FirestoreProperty]
+    public string Password { get; set; }
 
 
     public Account(string email, string nickname, string password)
