@@ -8,7 +8,7 @@ public class PostManager : Singleton<PostManager>
 	private PostRepository _repository;
 	private List<PostDTO> _posts;
 	public List<PostDTO> Posts => _posts;
-	public Action OnDataChanged;
+	public event Action OnDataChanged;
 	
 	public LikeDTO likeDto;
 	

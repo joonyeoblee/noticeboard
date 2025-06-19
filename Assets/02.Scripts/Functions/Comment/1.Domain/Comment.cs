@@ -2,6 +2,7 @@
 public class Comment
 {
 	public string Email;
+	public string Nickname;
 	public string PostID;
 	public string CommentId;
 	public string Content;

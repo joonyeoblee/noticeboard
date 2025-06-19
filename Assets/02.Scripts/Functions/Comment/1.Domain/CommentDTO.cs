@@ -5,13 +5,15 @@ using UnityEngine;
 public class CommentDTO
 {
     [FirestoreProperty]
-    public string Email { get; set; }
+    public string Email { get; private set; }
     [FirestoreProperty]
-    public string PostID { get; set; }
+    public string Nickname { get; private set; }
     [FirestoreProperty]
-    public string CommentId { get; set; }
+    public string PostID { get; private set; }
     [FirestoreProperty]
-    public string Content { get; set; }
+    public string CommentId { get; private set; }
     [FirestoreProperty]
-    public Timestamp CommentTime { get; set; }
+    public string Content { get; private set; }
+    [FirestoreProperty]
+    public Timestamp CommentTime { get; private set; }
 }
