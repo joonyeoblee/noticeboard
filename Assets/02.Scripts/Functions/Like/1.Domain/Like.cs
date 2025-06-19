@@ -1,4 +1,5 @@
 ﻿using Firebase.Firestore;
+
 public enum ETargetType
 {
 	Post = 0,
@@ -7,17 +8,11 @@ public enum ETargetType
 	Count
 }
 
-[FirestoreData]
 public class Like
 {
-	[FirestoreProperty]
-	public string Email { get; set; }
-	[FirestoreProperty]
-	public string Nickname { get; set; }
-	[FirestoreProperty]
-	public string TargetID { get; set; }
-	[FirestoreProperty]
-	public int TargetType { get; set; }
-	[FirestoreProperty]
-	public bool IsLiked { get; set; }
+	public string Email;
+	public string Nickname;
+	public string TargetID;
+	public int TargetType;
+	public bool IsLiked;
 }

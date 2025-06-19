@@ -1,13 +1,9 @@
 using System;
 using Firebase.Firestore;
-[FirestoreData]
 public class Account
 {
-    [FirestoreProperty]
     public string Email { get; set; }
-    [FirestoreProperty]
     public string Nickname { get; set; }
-    [FirestoreProperty]
     public string Password { get; set; }
 
 
