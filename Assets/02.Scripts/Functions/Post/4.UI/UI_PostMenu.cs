@@ -3,25 +3,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
+
 public class UI_PostMenu : MonoBehaviour
 {
 	private PostDTO _post;
 	private readonly ETargetType _targetType = ETargetType.Post;
-	
-	public Button LikeButton;
 	AccountDTO account => AccountManager.Instance.CurrentAccount;
 
 	public GameObject[] LikeImage;
 	
 	private bool _isLiked;
 	private	LikeDTO _myLike;
+	
 	public void Refresh(PostDTO post)
 	{
+		Debug.Log("Refresh");
 		_post = post;
-		if (LikeImage.Count() == 0)
-		{
-			return;
-		}
+	
 		if (_post.Likes.Any(like => like.Email == account.Email))
 		{
 			LikeImage[0].SetActive(false);
@@ -31,9 +29,12 @@ public class UI_PostMenu : MonoBehaviour
 		}
 		else
 		{
+			_isLiked = false;
+			_myLike = null;
 			LikeImage[0].SetActive(true);
 			LikeImage[1].SetActive(false);
 		}
+	
 	}
 	private async void Like()
 	{
@@ -60,7 +61,7 @@ public class UI_PostMenu : MonoBehaviour
 	private async void UnLike()
 	{
 		// UnLike 처리를 위한 로직
-		if (await PostManager.Instance.TryRemoveLike(_post.PostID, _myLike))
+		if (await PostManager.Instance.TryRemoveLike(_post, _myLike))
 		{
 			// UI 반영: 좋아요 이미지 변경
 			Debug.Log("Like removed");

@@ -16,10 +16,10 @@ public class UI_Post : MonoBehaviour
 	public TextMeshProUGUI ContentTextUI;
 	public TextMeshProUGUI LikeAndCommentTextUI;
 	
+	public GameObject CommentPanel;
+	
 	private PostDTO _post;
-	private void Start()
-	{
-	}
+	
 	public void Refresh(PostDTO postDto)
 	{
 		_post = postDto;
@@ -37,5 +37,10 @@ public class UI_Post : MonoBehaviour
 	public void OnClickModifyButton()
 	{
 		//event?.Invoke;
+	}
+
+	public void OnClickCommentButton()
+	{
+		CommentPanel.SetActive(true);
 	}
 }

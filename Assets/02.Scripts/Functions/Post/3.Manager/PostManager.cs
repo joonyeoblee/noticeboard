@@ -45,7 +45,7 @@ public class PostManager : Singleton<PostManager>
 			if (post != null)
 			{
 				post.AddLike(like.ToDto());
-				OnDataChanged?.Invoke(); // 즉시 UI 반영
+				OnDataChanged?.Invoke();
 			}
 
 			await _repository.AddLike(like.ToDto(), postId);
@@ -79,12 +79,12 @@ public class PostManager : Singleton<PostManager>
 		OnDataChanged?.Invoke();
 	}
 
-	public async Task<bool> TryRemoveLike(string postId, LikeDTO likeDto)
+	public async Task<bool> TryRemoveLike(PostDTO postDto, LikeDTO likeDto)
 	{
 		try
 		{
-			PostDTO post = _posts.FirstOrDefault(p => p.PostID == postId);
-			_repository.RemoveLike(postId, likeDto);
+			postDto.RemoveLike(likeDto);
+			_repository.RemoveLike(postDto, likeDto);
 			OnDataChanged?.Invoke();
 			return true;
 		}

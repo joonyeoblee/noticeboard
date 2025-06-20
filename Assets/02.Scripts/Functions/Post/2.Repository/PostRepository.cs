@@ -159,28 +159,16 @@ public class PostRepository
 			throw;
 		}
 	}
-	public async Task RemoveLike(string postId, LikeDTO likeDto)
+	public async Task RemoveLike(PostDTO postDto, LikeDTO likeDto)
 	{
 		try
 		{
 			// 'Post' 컬렉션에서 해당 postId의 문서의 서브컬렉션 'Like' 가져오기
-			CollectionReference likeCollectionRef = _db.Collection("Post")
-				.Document(postId)
-				.Collection("Like");
+			DocumentReference likeRef = _db.Collection("Post")
+				.Document(postDto.PostID)
+				.Collection("Like").Document(likeDto.LikeID);
 
-			// LikeDTO에 해당하는 문서를 찾기 위한 쿼리
-			Query query = likeCollectionRef.WhereEqualTo("LikeID", likeDto.LikeID); // LikeID로 문서를 찾음
-			QuerySnapshot querySnapshot = await query.GetSnapshotAsync();
-
-			// 해당 LikeID를 가진 문서가 있으면 삭제
-			DocumentSnapshot doc = querySnapshot.Documents.FirstOrDefault(); // 첫 번째 문서 찾기
-
-			// 해당 문서 삭제
-			if (doc != null)
-			{
-				await doc.Reference.DeleteAsync();
-			}
-			Debug.Log("asdasd");
+			await likeRef.DeleteAsync();
 		}
 		catch (Exception e)
 		{
