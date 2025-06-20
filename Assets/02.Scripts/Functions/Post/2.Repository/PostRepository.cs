@@ -170,10 +170,8 @@ public class PostRepository
 	{
 		try
 		{
-			// postId 문서의 하위 컬렉션 'Like'에 likeId를 문서 ID로 사용
-			string likeId = likeDto.LikeID ?? Guid.NewGuid().ToString(); // null 방지
 			DocumentReference likeRef = _db.Collection("Post").Document(postDto.PostID)
-				.Collection("Like").Document(likeId);
+				.Collection("Like").Document();
 
 			await likeRef.SetAsync(likeDto);
 		}
@@ -196,8 +194,7 @@ public class PostRepository
 		}
 		catch (Exception e)
 		{
-			Debug.LogError($"Failed to remove like: {e.Message}");
-			throw;
+			
 		}
 	}
 }
