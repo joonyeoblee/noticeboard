@@ -20,11 +20,8 @@ public class PostRepository
 	public async Task<List<PostDTO>> GetPosts(int start, int limit)
 	{
 		List<PostDTO> postDtos = new List<PostDTO>();
-		List<LikeDTO> likeDtos = new List<LikeDTO>();
-		List<CommentDTO> commentDtos = new List<CommentDTO>();
 		try
 		{
-			// "PostTime" 기준으로 내림차순 정렬하여 최신 게시글부터 가져옴
 			Query query = _db.Collection("Post")
 				.OrderByDescending("PostTime")
 				.Limit(start + limit);
@@ -32,39 +29,41 @@ public class PostRepository
 			QuerySnapshot snapshot = await query.GetSnapshotAsync();
 			Debug.Log("snapshot" + snapshot.Count);
 
-			// start부터 limit 개수만큼 리스트에 추가
 			for (int i = start; i < Math.Min(start + limit, snapshot.Count); i++)
 			{
 				DocumentSnapshot doc = snapshot[i];
 				PostDTO postDto = doc.ConvertTo<PostDTO>();
 
-				// 좋아요 서브컬렉션에서 좋아요 수 가져오기
+				List<LikeDTO> likeDtos = new List<LikeDTO>();
+				List<CommentDTO> commentDtos = new List<CommentDTO>();
+
 				var likeQuerySnapshot = await _db.Collection("Post")
 					.Document(postDto.PostID)
 					.Collection("Like")
 					.GetSnapshotAsync();
-				// 좋아요 데이터를 PostDTO에 추가
+
 				foreach (var likeDoc in likeQuerySnapshot.Documents)
 				{
 					LikeDTO likeDto = likeDoc.ConvertTo<LikeDTO>();
 					likeDtos.Add(likeDto);
 				}
 
-				// 좋아요 서브컬렉션에서 좋아요 수 가져오기
-				QuerySnapshot CommentQuerySnapshot = await _db.Collection("Post")
+				var commentQuerySnapshot = await _db.Collection("Post")
 					.Document(postDto.PostID)
 					.Collection("Comment")
 					.GetSnapshotAsync();
-				// 좋아요 데이터를 PostDTO에 추가
-				foreach (DocumentSnapshot CommentDoc in CommentQuerySnapshot.Documents)
+
+				foreach (DocumentSnapshot commentDoc in commentQuerySnapshot.Documents)
 				{
-					CommentDTO CommentDto = CommentDoc.ConvertTo<CommentDTO>();
-					commentDtos.Add(CommentDto);
+					CommentDTO commentDto = commentDoc.ConvertTo<CommentDTO>();
+					commentDtos.Add(commentDto);
 				}
 
+				// DTO에 넣기
 				postDto = new PostDTO(postDto, likeDtos, commentDtos);
 				postDtos.Add(postDto);
 			}
+
 		}
 		catch (Exception e)
 		{
@@ -88,24 +87,20 @@ public class PostRepository
 			{
 				postDto = snapshot.ConvertTo<PostDTO>();
 
-				// 좋아요 서브컬렉션에서 좋아요 수 가져오기
 				var likeQuerySnapshot = await _db.Collection("Post")
 					.Document(postId)
 					.Collection("Like")
 					.GetSnapshotAsync();
-				// 좋아요 데이터를 PostDTO에 추가
 				foreach (var likeDoc in likeQuerySnapshot.Documents)
 				{
 					LikeDTO likeDto = likeDoc.ConvertTo<LikeDTO>();
 					likeDtos.Add(likeDto);
 				}
 
-				// 좋아요 서브컬렉션에서 좋아요 수 가져오기
 				QuerySnapshot CommentQuerySnapshot = await _db.Collection("Post")
 					.Document(postId)
 					.Collection("Comment")
 					.GetSnapshotAsync();
-				// 좋아요 데이터를 PostDTO에 추가
 				foreach (DocumentSnapshot CommentDoc in CommentQuerySnapshot.Documents)
 				{
 					CommentDTO CommentDto = CommentDoc.ConvertTo<CommentDTO>();
