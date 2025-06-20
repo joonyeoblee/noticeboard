@@ -5,6 +5,7 @@
 		public GameObject Write;
 		public GameObject Posts;
 		public GameObject Modify;
+		public GameObject Login;
 		
 
 		public void WriteObject()
@@ -15,6 +16,17 @@
 		{
 			Modify.SetActive(true);
 			Modify.GetComponent<UI_PostModify>().Refresh(postDto);
+		}
+		public void LoginAndOpenPost()
+		{
+			Login.SetActive(false);
+			Posts.SetActive(true);
+			PostManager.Instance.OpenComments();
+		}
+		public void Logout()
+		{
+			Login.SetActive(true);
+			Posts.SetActive(false);
 		}
 		public async void Close()
 		{
