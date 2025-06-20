@@ -33,25 +33,31 @@ public class Post
 			throw new Exception(accountNicknameSpecification.ErrorMessage);
 		}
 
+		PostContentSpecification contentSpecification = new PostContentSpecification();
+		if (!contentSpecification.IsSatisfiedBy(content))
+		{
+			throw new Exception(contentSpecification.ErrorMessage);
+		}
+		
+		PostViewCountSpecification viewCountSpecification = new PostViewCountSpecification();
+		if (!viewCountSpecification.IsSatisfiedBy(viewCount))
+		{
+			throw new Exception(viewCountSpecification.ErrorMessage);
+		}
+		PostLikeCountSpecification likeSpecification = new PostLikeCountSpecification();
+		if (!likeSpecification.IsSatisfiedBy(like))
+		{
+			throw new Exception(likeSpecification.ErrorMessage);
+		}
+
 		if (string.IsNullOrEmpty(postID))
 		{
 			throw new Exception("PostID는 비어있을 수 없습니다");
 		}
 
-		if (string.IsNullOrEmpty(content))
-		{
-			throw new Exception("content은 비어있을 수 없습니다");
-		}
-
-		if (like < 0)
-		{
-			throw new Exception("like수는 0보다 작을 수 없습니다");
-		}
 		
-		if (viewCount < 0)
-		{
-			throw new Exception("viewCount는 0보다 작을 수 없습니다");
-		}
+		
+
 		Email = email;
 		Nickname = nickname;
 		PostID = postID;
