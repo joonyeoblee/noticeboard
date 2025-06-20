@@ -16,10 +16,10 @@ public class UI_Post : MonoBehaviour
 	public TextMeshProUGUI ContentTextUI;
 	public TextMeshProUGUI LikeAndCommentTextUI;
 	
+	public GameObject CommentPanel;
+	
 	private PostDTO _post;
-	private void Start()
-	{
-	}
+	
 	public void Refresh(PostDTO postDto)
 	{
 		_post = postDto;
@@ -41,5 +41,11 @@ public class UI_Post : MonoBehaviour
 		if (canvas == null) return;
 
 		canvas.ModifyObject(_post.PostID);
+	}
+
+	public void OnClickCommentButton()
+	{
+		CommentPanel.SetActive(true);
+		CommentPanel.GetComponent<UI_PostRead>().Refresh(_post);
 	}
 }

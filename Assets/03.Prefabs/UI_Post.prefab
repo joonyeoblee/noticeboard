@@ -136,12 +136,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UI_PostMenus:
   - {fileID: 2648053794255861404}
-  - {fileID: 8027111607477123981}
   PosterNameTextUI: {fileID: 5545677293185849610}
   PosterTimestampTextUI: {fileID: 750530172145373635}
   DropdownButton: {fileID: 6255015270266491059}
   ContentTextUI: {fileID: 3207482866067918817}
   LikeAndCommentTextUI: {fileID: 2211436976001012855}
+  CommentPanel: {fileID: 0}
 --- !u!1 &1058126985218252535
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,7 +154,7 @@ GameObject:
   - component: {fileID: 7451914789626226936}
   - component: {fileID: 2690761700329818598}
   m_Layer: 0
-  m_Name: HeartImage
+  m_Name: CommentImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -364,7 +364,7 @@ GameObject:
   - component: {fileID: 2136640065593816830}
   - component: {fileID: 3335357223962858995}
   m_Layer: 0
-  m_Name: LikeBox
+  m_Name: LikeAndCommentPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1377,7 +1377,6 @@ GameObject:
   - component: {fileID: 938378970767039830}
   - component: {fileID: 4630960700731498414}
   - component: {fileID: 870893146816973514}
-  - component: {fileID: 8027111607477123981}
   m_Layer: 0
   m_Name: CommentsButton
   m_TagString: Untagged
@@ -1487,20 +1486,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4630960700731498414}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
---- !u!114 &8027111607477123981
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6450471648353172366}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f51a32fd4d64fb4795fb71339612579, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LikeImage: []
+      m_Calls:
+      - m_Target: {fileID: 8848361768815876145}
+        m_TargetAssemblyTypeName: UI_Post, Assembly-CSharp
+        m_MethodName: OnClickCommentButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7975272265523077427
 GameObject:
   m_ObjectHideFlags: 0
@@ -1628,7 +1626,7 @@ MonoBehaviour:
       - m_Target: {fileID: 2648053794255861404}
         m_TargetAssemblyTypeName: UI_PostMenu, Assembly-CSharp
         m_MethodName: ToggleLike
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

@@ -46,5 +46,10 @@ public class PostDTO
 		PostTime = postTime;
 		
 	}
-	
+
+	public void RemoveLike(LikeDTO likeDto)
+	{
+		Likes.Remove(likeDto);
+		LikeCount = Likes.Count;
+	}
 }
