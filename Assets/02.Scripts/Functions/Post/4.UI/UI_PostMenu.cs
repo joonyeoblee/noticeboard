@@ -41,7 +41,7 @@ public class UI_PostMenu : MonoBehaviour
 		Like like = new Like(account.Email, account.Nickname, _post.PostID, likeId, (int)_targetType);
 
 		// 좋아요 추가 (PostManager를 통해)
-		if (await PostManager.Instance.TryAddLike(like.ToDto(), _post))
+		if (await PostManager.Instance.TryAddLike(_post, like.ToDto()))
 		{
 			// UI 반영: 좋아요 이미지 변경
 			Debug.Log("Like added");
@@ -58,7 +58,7 @@ public class UI_PostMenu : MonoBehaviour
 	private async void UnLike()
 	{
 		// UnLike 처리를 위한 로직
-		if (await PostManager.Instance.TryRemoveLike(_myLike, _post))
+		if (await PostManager.Instance.TryRemoveLike(_post, _myLike))
 		{
 			// UI 반영: 좋아요 이미지 변경
 			Debug.Log("Like removed");
