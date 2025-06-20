@@ -6,8 +6,8 @@ public class UI_PostList : MonoBehaviour
 	public GameObject UI_PostPrefab;
 	public GameObject UI_PostContainer;
 
-	
-	private List<PostDTO> _postDtos => PostManager.Instance.Posts;
+
+	private List<PostDTO> _postDtos;
 	
 	public void Start()
 	{
@@ -16,8 +16,10 @@ public class UI_PostList : MonoBehaviour
 
 	public void Refresh()
 	{
+		_postDtos = PostManager.Instance.PostDtos;
+		
 		int postCount = _postDtos?.Count ?? 0;
-		int limit = PostManager.Instance.limit;
+		int limit = PostManager.Instance.Limit;
 		int count = Mathf.Min(postCount, limit);
 
 		EnsurePostSlots(limit); // 슬롯 부족하면 생성

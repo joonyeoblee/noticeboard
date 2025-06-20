@@ -31,7 +31,10 @@ public class UI_Post : MonoBehaviour
 		PosterNameTextUI.text = _post.Nickname;
 		PosterTimestampTextUI.text = _post.PostTime.ToString();
 		ContentTextUI.text = _post.Content;
-		LikeAndCommentTextUI.text = $"좋아요 {_post.Likes.Count}, 댓글 {_post.Comments.Count}";
+		if (LikeAndCommentTextUI != null)
+		{
+			LikeAndCommentTextUI.text = $"좋아요 {_post.Likes.Count}, 댓글 {_post.Comments.Count}";
+		}
 	}
 
 	public void OnClickModifyButton()

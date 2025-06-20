@@ -20,4 +20,9 @@ public class LikeDTO
 		Email = email;
 		Nickname = nickname;
 	}
+
+	public Like ToDomain()
+	{
+		return new Like(Email,Nickname);
+	}
 }

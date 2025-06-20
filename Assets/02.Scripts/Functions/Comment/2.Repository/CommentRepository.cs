@@ -10,7 +10,7 @@ public class CommentRepository
 	{
 		_db = db;
 	}
-	public async Task AddComment(PostDTO postDto, CommentDTO CommentDto)
+	public async Task<bool> AddComment(PostDTO postDto, CommentDTO CommentDto)
 	{
 		try
 		{
@@ -19,11 +19,12 @@ public class CommentRepository
 				.Collection("Comment").Document();
 
 			await CommentRef.SetAsync(CommentDto);
+			return true;
 		}
 		catch (Exception e)
 		{
 			Debug.LogError($"Failed to add Comment: {e.Message}");
-			throw;
+			return false;
 		}
 	}
 	public async Task RemoveComment(PostDTO postDto, CommentDTO CommentDto)
