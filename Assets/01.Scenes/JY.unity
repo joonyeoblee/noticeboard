@@ -9202,6 +9202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UI_Post: {fileID: 8848361767900947190}
+  CommentContent: {fileID: 560204426}
 --- !u!1001 &1903112453
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17517,6 +17518,7 @@ MonoBehaviour:
   Write: {fileID: 332045726}
   Posts: {fileID: 606084386493279256}
   Modify: {fileID: 748302268312938842}
+  Login: {fileID: 0}
 --- !u!222 &8938228576248298848
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -13,6 +13,6 @@ public class UI_PostRead : MonoBehaviour
 
 	public async void WriteComment()
 	{
-
+		
 	}
 }
