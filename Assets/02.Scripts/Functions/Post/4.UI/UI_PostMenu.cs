@@ -1,10 +1,8 @@
-using System;
 using System.Linq;
 using UnityEngine;
 public class UI_PostMenu : MonoBehaviour
 {
 	private PostDTO _post;
-	private readonly ETargetType _targetType = ETargetType.Post;
 	AccountDTO account => AccountManager.Instance.CurrentAccount;
 
 	public GameObject[] LikeImage;
@@ -14,7 +12,6 @@ public class UI_PostMenu : MonoBehaviour
 	
 	public void Refresh(PostDTO post)
 	{
-		Debug.Log("Refresh");
 		_post = post;
 	
 		if (_post.Likes.Any(like => like.Email == account.Email))
@@ -35,10 +32,8 @@ public class UI_PostMenu : MonoBehaviour
 	}
 	private async void Like()
 	{
-		string likeId = Guid.NewGuid().ToString();
-
 		// LikeDTO 생성
-		Like like = new Like(account.Email, account.Nickname, _post.PostID, likeId, (int)_targetType);
+		Like like = new Like(account.Email, account.Nickname);
 		
 		// 좋아요 추가 (PostManager를 통해)
 		if (await PostManager.Instance.TryAddLike(_post, like))

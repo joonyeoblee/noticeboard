@@ -15,9 +15,8 @@ public class CommentRepository
 		try
 		{
 			// postId 문서의 하위 컬렉션 'Comment'에 CommentId를 문서 ID로 사용
-			string CommentId = CommentDto.CommentID ?? Guid.NewGuid().ToString(); // null 방지
 			DocumentReference CommentRef = _db.Collection("Post").Document(postDto.PostID)
-				.Collection("Comment").Document(CommentId);
+				.Collection("Comment").Document();
 
 			await CommentRef.SetAsync(CommentDto);
 		}

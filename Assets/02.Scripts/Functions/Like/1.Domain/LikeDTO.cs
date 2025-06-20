@@ -2,32 +2,22 @@
 [FirestoreData]
 public class LikeDTO
 {
+	[FirestoreDocumentId]
+	public string LikeID { get; set; }
 	[FirestoreProperty]
 	public string Email { get; set; }
 	
 	[FirestoreProperty]
 	public string Nickname{ get; set; }
-	
-	[FirestoreProperty]
-	public string TargetID{ get; set; }
-	
-	[FirestoreProperty]
-	public int TargetType{ get; set; }
-	
-	[FirestoreProperty]
-	public string LikeID { get; set; }
 
 	public LikeDTO()
 	{
-		
-	}	
 
-	public LikeDTO(string email, string nickname, string targetID, string likeID, int targetType)
+	}
+
+	public LikeDTO(string email, string nickname)
 	{
 		Email = email;
 		Nickname = nickname;
-		TargetID = targetID;
-		LikeID = likeID;
-		TargetType = targetType;
 	}
 }

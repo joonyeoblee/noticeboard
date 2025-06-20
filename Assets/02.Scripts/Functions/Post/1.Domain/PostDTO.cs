@@ -3,12 +3,12 @@ using Firebase.Firestore;
 [FirestoreData]
 public class PostDTO
 {
+	[FirestoreDocumentId]
+	public string PostID { get; set; }
 	[FirestoreProperty]
 	public string Email { get; private set; }
 	[FirestoreProperty]
 	public string Nickname { get; private set; }
-	[FirestoreProperty]
-	public string PostID { get; private set; }
 	[FirestoreProperty]
 	public string Content { get; private set; }
 	[FirestoreProperty]
