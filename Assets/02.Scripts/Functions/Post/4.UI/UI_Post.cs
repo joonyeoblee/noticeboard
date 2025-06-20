@@ -36,7 +36,11 @@ public class UI_Post : MonoBehaviour
 
 	public void OnClickModifyButton()
 	{
-		//event?.Invoke;
+		UI_Canvas canvas = gameObject.GetComponentInParent<UI_Canvas>();
+
+		if (canvas == null) return;
+
+		canvas.ModifyObject(_post.PostID);
 	}
 
 	public void OnClickCommentButton()
