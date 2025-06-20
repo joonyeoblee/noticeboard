@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 public class UI_PostList : MonoBehaviour
 {
 	public List<UI_Post> _ui_Posts;
@@ -35,7 +34,7 @@ public class UI_PostList : MonoBehaviour
 				_ui_Posts[i].gameObject.SetActive(false);
 			}
 		}
-		
+
 	}
 	private void EnsurePostSlots(int requiredCount)
 	{

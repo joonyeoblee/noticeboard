@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 public class PostManager : Singleton<PostManager>
@@ -36,19 +35,14 @@ public class PostManager : Singleton<PostManager>
 			throw;
 		}
 	}
-	
-	public async Task<bool> TryAddLike(Like like, string postId)
+
+	public async Task<bool> TryAddLike(LikeDTO likeDto, PostDTO postDto)
 	{
 		try
 		{
-			var post = _posts.FirstOrDefault(p => p.PostID == postId);
-			if (post != null)
-			{
-				post.AddLike(like.ToDto());
-				OnDataChanged?.Invoke();
-			}
-
-			await _repository.AddLike(like.ToDto(), postId);
+			// 직접 추가로 UI 빠르게 갱신 및 초기화 비용 절약
+			postDto.AddLikeDto(likeDto);
+			await _repository.AddLike(likeDto, postDto);
 			OnDataChanged?.Invoke();
 			return true;
 		}
@@ -79,12 +73,13 @@ public class PostManager : Singleton<PostManager>
 		OnDataChanged?.Invoke();
 	}
 
-	public async Task<bool> TryRemoveLike(PostDTO postDto, LikeDTO likeDto)
+	public async Task<bool> TryRemoveLike(LikeDTO likeDto, PostDTO postDto)
 	{
 		try
 		{
-			postDto.RemoveLike(likeDto);
+			postDto.RemoveLikeDto(likeDto);
 			_repository.RemoveLike(postDto, likeDto);
+			
 			OnDataChanged?.Invoke();
 			return true;
 		}

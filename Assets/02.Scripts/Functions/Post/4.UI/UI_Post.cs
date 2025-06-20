@@ -40,7 +40,7 @@ public class UI_Post : MonoBehaviour
 
 		if (canvas == null) return;
 
-		canvas.ModifyObject(_post.PostID);
+		canvas.ModifyObject(_post);
 	}
 
 	public void OnClickCommentButton()
