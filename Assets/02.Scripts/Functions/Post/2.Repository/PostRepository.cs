@@ -166,14 +166,15 @@ public class PostRepository
 	}
 
 
-	public async Task AddLike(PostDTO postDto, LikeDTO likeDto)
+	public async Task<bool> AddLike(PostDTO postDto, LikeDTO likeDto)
 	{
 		try
 		{
 			DocumentReference likeRef = _db.Collection("Post").Document(postDto.PostID)
-				.Collection("Like").Document();
+				.Collection("Like").Document(likeDto.Email);
 
 			await likeRef.SetAsync(likeDto);
+			return true;
 		}
 		catch (Exception e)
 		{
@@ -188,7 +189,7 @@ public class PostRepository
 			// 'Post' 컬렉션에서 해당 postId의 문서의 서브컬렉션 'Like' 가져오기
 			DocumentReference likeRef = _db.Collection("Post")
 				.Document(postDto.PostID)
-				.Collection("Like").Document(likeDto.LikeID);
+				.Collection("Like").Document(likeDto.Email);
 
 			await likeRef.DeleteAsync();
 		}

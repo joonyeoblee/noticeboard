@@ -23,6 +23,6 @@ public class LikeDTO
 
 	public Like ToDomain()
 	{
-		return new Like(Email,Nickname);
+		return new Like( Email, Nickname);
 	}
 }

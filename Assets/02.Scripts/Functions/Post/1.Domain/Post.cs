@@ -10,9 +10,9 @@ public class Post
 	public int ViewCount { get; }
 	public Timestamp PostTime { get; }
 	private readonly List<Like> _likes = new List<Like>();
-	public IReadOnlyList<Like> Likes { get; } = new List<Like>();
+	public IReadOnlyList<Like> Likes => _likes;
 	private readonly List<Comment> _comments = new List<Comment>();
-	public IReadOnlyList<Comment> Comments => _comments;
+	public IReadOnlyList<Comment> Comments => _comments; // Comments도 동일하게 적용
 	public Post() { }
 
 	public Post(string email, string nickname, string postID, string content, int like = 0, int viewCount = 0)
@@ -78,7 +78,7 @@ public class Post
 		}
 		foreach (CommentDTO commentDto in postDto.Comments)
 		{
-			_comments.Add(commentDto.ToDomain());
+			_comments.Add(commentDto.ToDomain()); // Comments 필드 대신 _comments 사용
 		}
 	}
 	public PostDTO ToDto()
@@ -86,18 +86,21 @@ public class Post
 		List<LikeDTO> likeDTOs = new List<LikeDTO>();
 		List<CommentDTO> commentDtos = new List<CommentDTO>();
 
-		foreach (Like like in _likes)
+		foreach (Like like in _likes) // _likes 필드를 사용
 		{
 			LikeDTO likeDTO = like.ToDto();
 			likeDTOs.Add(likeDTO);
 		}
 
-		foreach (Comment comment in _comments)
+		foreach (Comment comment in _comments) // _comments 필드를 사용
 		{
 			CommentDTO commentDTO = comment.ToDto();
 			commentDtos.Add(commentDTO);
 		}
 
+		// PostDTO 생성자에 LikeCount를 전달해야 할 경우:
+		// return new PostDTO(Email, Nickname, PostID, Content, _likes.Count, ViewCount, PostTime, likeDTOs, commentDtos);
+		// PostDTO에 LikeCount 속성이 있다면 이렇게 LikeCount를 계산해서 전달합니다.
 		return new PostDTO(Email, Nickname, PostID, Content, ViewCount, PostTime, likeDTOs, commentDtos);
 	}
 
@@ -110,5 +113,19 @@ public class Post
 	{
 		_comments.Add(comment);
 	}
+	public void RemoveLike(Like likeToRemove)
+	{
+		if (likeToRemove == null)
+		{
+			return;
+		}
 
+		Like foundLike = _likes.Find(l => l.Email == likeToRemove.Email);
+
+		if (foundLike != null)
+		{
+			_likes.Remove(foundLike);
+		}
+
+	}
 }

@@ -50,18 +50,5 @@ public class PostDTO
 		Likes = likes;
 		Comments = comments;
 	}
-
-	public void RemoveLikeDto(LikeDTO likeDto)
-	{
-		Likes.Remove(likeDto);
-	}
-
-	public void AddLikeDto(LikeDTO likeDto)
-	{
-		Likes.Add(likeDto);
-	}
-	public void AddCommentDto(LikeDTO likeDto)
-	{
-		Likes.Add(likeDto);
-	}
+	
 }

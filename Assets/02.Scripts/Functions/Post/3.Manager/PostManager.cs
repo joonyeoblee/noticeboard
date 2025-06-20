@@ -5,7 +5,7 @@ using UnityEngine;
 public class PostManager : Singleton<PostManager>
 {
 	private PostRepository _repository;
-	public List<PostDTO> PostDtos { get; private set; }
+	public List<PostDTO> PostDtos { get; set; }
 	public event Action OnDataChanged;
 	public int Limit { get; } = 10;
 	
@@ -34,19 +34,28 @@ public class PostManager : Singleton<PostManager>
 	public async Task<bool> TryAddLike(PostDTO postDto, Like like)
 	{
 
-		Post post = new Post(postDto);
-		post.AddLike(like);
-		// 기존 리스트에서 동일한 ID의 요소 찾아서 교체
-		int index = PostDtos.FindIndex(p => p.PostID == post.PostID);
-		if (index != -1)
-		{
-			PostDtos[index] = post.ToDto();
-			Debug.LogError(PostDtos[index].LikeCount);
-		}
+		bool success = await _repository.AddLike(postDto, like.ToDto());
 
-		await _repository.AddLike(postDto, like.ToDto());
-		OnDataChanged?.Invoke();
-		return true;
+		if (success)
+		{
+			Post post = new Post(postDto);
+			post.AddLike(like);
+
+			int index = PostDtos.FindIndex(p => p.PostID == post.PostID);
+			if (index != -1)
+			{
+				PostDtos[index] = post.ToDto();
+				Debug.LogError(PostDtos[index].LikeCount); // Log the updated count
+			}
+
+			OnDataChanged?.Invoke();
+			return true;
+		}
+		else
+		{
+			Debug.LogError("Failed to add like to repository.");
+			return false;
+		}
 	
 	}
 	public async Task<bool> TryUpdatePost(Post post)
@@ -65,10 +74,23 @@ public class PostManager : Singleton<PostManager>
 
 	public async Task<bool> TryRemoveLike(PostDTO postDto, LikeDTO likeDto)
 	{
-		postDto.RemoveLikeDto(likeDto);
-		_repository.RemoveLike(postDto, likeDto);
+
+		Post post = new Post(postDto);
+		post.RemoveLike(likeDto.ToDomain());
+		int index = PostDtos.FindIndex(p => p.PostID == post.PostID);
+		if (index != -1)
+		{
+			PostDtos[index] = post.ToDto();
+			Debug.LogError(PostDtos[index].LikeCount); // Log the updated count
+		}
+		await _repository.RemoveLike(postDto, likeDto);
 
 		OnDataChanged?.Invoke();
 		return true;
+	}
+
+	public PostDTO GetPostById(string postId)
+	{
+		return PostDtos?.Find(p => p.PostID == postId);
 	}
 }

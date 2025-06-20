@@ -13,7 +13,6 @@ public class UI_PostMenu : MonoBehaviour
 	public void Refresh(PostDTO post)
 	{
 		_post = post;
-		Debug.Log(post.Content);
 		if (_post.Likes.Any(like => like.Email == account.Email))
 		{
 			LikeImage[0].SetActive(false);
@@ -41,8 +40,6 @@ public class UI_PostMenu : MonoBehaviour
 			Debug.Log("Like added");
 			LikeImage[0].SetActive(false);
 			LikeImage[1].SetActive(true);
-
-
 			_myLike = new LikeDTO(account.Email, account.Nickname);
 		}
 		else
@@ -58,12 +55,13 @@ public class UI_PostMenu : MonoBehaviour
 			Debug.Log("Like removed");
 			LikeImage[0].SetActive(true);
 			LikeImage[1].SetActive(false);
-
 			_myLike = null;
 		}
 		else
 		{
-			Debug.LogError("Failed to remove like");
+			LikeImage[0].SetActive(false);
+			LikeImage[1].SetActive(true);
+			_isLiked = true;
 		}
 	}
 
