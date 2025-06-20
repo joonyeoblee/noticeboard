@@ -48,9 +48,4 @@ public class UI_Post : MonoBehaviour
 		CommentPanel.SetActive(true);
 		CommentPanel.GetComponent<UI_PostRead>().Refresh(_post);
 	}
-
-	public void OnClickCommentButton()
-	{
-		CommentPanel.SetActive(true);
-	}
 }
