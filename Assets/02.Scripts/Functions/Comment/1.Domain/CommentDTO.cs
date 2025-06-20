@@ -1,6 +1,4 @@
 using Firebase.Firestore;
-using UnityEngine;
-
 [FirestoreData]
 public class CommentDTO
 {
@@ -11,7 +9,7 @@ public class CommentDTO
     [FirestoreProperty]
     public string PostID { get; private set; }
     [FirestoreProperty]
-    public string CommentId { get; private set; }
+    public string CommentID { get; private set; }
     [FirestoreProperty]
     public string Content { get; private set; }
     [FirestoreProperty]

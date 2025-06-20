@@ -1,9 +1,6 @@
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UIElements;
-
 public class UI_PostMenu : MonoBehaviour
 {
 	private PostDTO _post;
@@ -44,7 +41,7 @@ public class UI_PostMenu : MonoBehaviour
 		Like like = new Like(account.Email, account.Nickname, _post.PostID, likeId, (int)_targetType);
 
 		// 좋아요 추가 (PostManager를 통해)
-		if (await PostManager.Instance.TryAddLike(like, _post.PostID))
+		if (await PostManager.Instance.TryAddLike(_post, like.ToDto()))
 		{
 			// UI 반영: 좋아요 이미지 변경
 			Debug.Log("Like added");

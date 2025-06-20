@@ -1,48 +1,47 @@
-using Firebase.Firestore;
+using System;
 using TMPro;
 using UnityEngine;
-
 public class UI_PostModify : MonoBehaviour
 {
     public TMP_InputField ModifyContentInputField;
 
-    public string CurrentPostID;
+    private string _currentPostID;
+    private PostDTO _post;
 
+    public void Refresh(PostDTO postDto)
+    {
+        _post = postDto;
+
+        if (_post == null)
+        {
+            throw new Exception("Post가 없음");
+        }
+        ModifyContentInputField.text = _post.Content;
+
+    }
     public async void UpdatePost()
     {
-        if (string.IsNullOrEmpty(CurrentPostID))
-        {
-            Debug.LogWarning("수정할 PostID가 설정되지 않았습니다.");
-            return;
-        }
-
-        PostDTO currentPost = PostManager.Instance.Posts.Find(t => t.PostID == CurrentPostID);
-
-        if (currentPost == null)
-        {
-            Debug.LogWarning($"PostID {CurrentPostID}에 해당하는 게시글을 찾을 수 없습니다.");
-            return;
-        }
-
         string newContent = ModifyContentInputField.text;
 
         if (string.IsNullOrWhiteSpace(newContent))
         {
-            Debug.LogWarning("수정할 내용이 비어 있습니다.");
-            return;
+            throw new Exception("수정할 내용이 비어 있습니다.");
         }
 
         // 내용만 바꾼 새로운 Post 생성
-        Post modifiedPost = new Post(currentPost.Email
-        , currentPost.Nickname, currentPost.Content
-        , newContent, currentPost.LikeCount
-        , currentPost.ViewCount, currentPost.PostTime);
+        Post modifiedPost = new Post(_post.Email
+            , _post.Nickname, _post.PostID
+            , newContent, _post.LikeCount
+            , _post.ViewCount, _post.PostTime);
+        
+        Debug.Log($"PostID = {modifiedPost.PostID}");
 
         bool success = await PostManager.Instance.TryUpdatePost(modifiedPost);
 
         if (success)
         {
             Debug.Log("게시글 수정 성공");
+            gameObject.GetComponentInParent<UI_Canvas>().Close();
         }
         else
         {

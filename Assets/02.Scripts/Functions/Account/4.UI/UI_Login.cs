@@ -6,16 +6,15 @@ using UnityEngine.UI;
 public class UI_Login : MonoBehaviour
 {
     [Header("로그인")]
+    public GameObject LoginPanel;
     public TMP_InputField EmailInputField;
     public TMP_InputField PasswordInputField;
-    public Button LoginButton;
-    
+
     [Header("회원가입")]
+    public GameObject RegisterPanel;
     public TMP_InputField RegisterEmailInputField;
     public TMP_InputField RegisterNicknameInputField;
     public TMP_InputField RegisterPasswordInputField;
-    public TMP_InputField RegisterPasswordConfirmInputField;
-    public Button RegisterButton;
 
 
     public async void OnLoginButtonClicked()
@@ -24,6 +23,7 @@ public class UI_Login : MonoBehaviour
         {
             await AccountManager.Instance.Login(EmailInputField.text, PasswordInputField.text);
             Debug.Log("로그인 완료!");
+            gameObject.GetComponentInParent<UI_Canvas>().LoginAndOpenPost();
             // 다음 화면 이동 등
         }
         catch (Exception ex)
@@ -31,6 +31,16 @@ public class UI_Login : MonoBehaviour
             Debug.LogError("로그인 실패: " + ex.Message);
             // 에러 메시지 출력 등
         }
+    }
+    public void OnRegisterPanelButtonClicked()
+    {
+        LoginPanel.SetActive(false);
+        RegisterPanel.SetActive(true);
+    }
+    public void OnLoginPanelButtonClicked()
+    {
+        LoginPanel.SetActive(true);
+        RegisterPanel.SetActive(false);
     }
     public async void OnRegisterButtonClicked()
     {
@@ -41,7 +51,9 @@ public class UI_Login : MonoBehaviour
                 RegisterPasswordInputField.text);
             Debug.Log("회원가입 완료!");
             // 다음 화면 이동 등
-            // Todo: Scene 이동 혹은 게시판 띄워주기
+            LoginPanel.SetActive(true);
+            EmailInputField.text = RegisterEmailInputField.text;
+            RegisterPanel.SetActive(false);
         }
         catch (Exception ex)
         {
