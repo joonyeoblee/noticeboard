@@ -39,9 +39,9 @@ public class UI_PostMenu : MonoBehaviour
 
 		// LikeDTO 생성
 		Like like = new Like(account.Email, account.Nickname, _post.PostID, likeId, (int)_targetType);
-
+		
 		// 좋아요 추가 (PostManager를 통해)
-		if (await PostManager.Instance.TryAddLike(_post, like.ToDto()))
+		if (await PostManager.Instance.TryAddLike(_post, like))
 		{
 			// UI 반영: 좋아요 이미지 변경
 			Debug.Log("Like added");

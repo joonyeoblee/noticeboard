@@ -9,9 +9,9 @@ public class Post
 	public string Content { get; }
 	public int ViewCount { get; }
 	public Timestamp PostTime { get; }
-	public List<LikeDTO> Likes { get; } = new List<LikeDTO>(); // 좋아요 리스트 추가
+	public List<Like> Likes { get; } = new List<Like>(); // 좋아요 리스트 추가
 
-	public List<CommentDTO> Comments { get; } = new List<CommentDTO>(); // 좋아요 리스트 추가
+	public List<Comment> Comments { get; } = new List<Comment>(); // 좋아요 리스트 추가
 	public Post() { }
 
 	public Post(string email, string nickname, string postID, string content, int like = 0, int viewCount = 0)
@@ -59,9 +59,47 @@ public class Post
 		ViewCount = viewCount;
 		PostTime = postTime;
 	}
+	public Post(PostDTO postDto)
+	{
+		if (postDto == null)
+		{
+			throw new ArgumentNullException(nameof(postDto));
+		}
+		Email = postDto.Email;
+		Nickname = postDto.Nickname;
+		PostID = postDto.PostID;
+		Content = postDto.Content;
+		ViewCount = postDto.ViewCount;
+		PostTime = postDto.PostTime;
+	}
 	public PostDTO ToDto()
 	{
-		return new PostDTO(Email, Nickname, PostID, Content, ViewCount, PostTime);
+		List<LikeDTO> likeDTOs = new List<LikeDTO>();
+		List<CommentDTO> commentDtos = new List<CommentDTO>();
+
+		foreach (Like like in Likes)
+		{
+			LikeDTO likeDTO = like.ToDto();
+			likeDTOs.Add(likeDTO);
+		}
+
+		foreach (Comment comment in Comments)
+		{
+			CommentDTO commentDTO = comment.ToDto();
+			commentDtos.Add(commentDTO);
+		}
+
+		return new PostDTO(Email, Nickname, PostID, Content, ViewCount, PostTime, likeDTOs, commentDtos);
+	}
+
+	public void AddLike(Like like)
+	{
+		Likes.Add(like);
+	}
+
+	public void AddComment(Comment comment)
+	{
+		Comments.Add(comment);
 	}
 
 }

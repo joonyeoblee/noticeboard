@@ -1,4 +1,5 @@
-﻿using Firebase.Firestore;
+﻿using System;
+using Firebase.Firestore;
 public class Comment
 {
 	public string Email;
@@ -15,5 +16,9 @@ public class Comment
 		PostID = postID;
 		CommentID = commentId;
 		Content = content;
+	}
+	public CommentDTO ToDto()
+	{
+		throw new NotImplementedException();
 	}
 }
