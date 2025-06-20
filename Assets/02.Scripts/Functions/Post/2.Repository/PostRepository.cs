@@ -141,7 +141,7 @@ public class PostRepository
 	}
 
 
-	public async Task AddLike(LikeDTO likeDto, PostDTO postDto)
+	public async Task AddLike(PostDTO postDto, LikeDTO likeDto)
 	{
 		try
 		{
@@ -175,6 +175,4 @@ public class PostRepository
 			throw;
 		}
 	}
-
-
 }

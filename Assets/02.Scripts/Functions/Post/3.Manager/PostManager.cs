@@ -36,13 +36,13 @@ public class PostManager : Singleton<PostManager>
 		}
 	}
 
-	public async Task<bool> TryAddLike(LikeDTO likeDto, PostDTO postDto)
+	public async Task<bool> TryAddLike(PostDTO postDto, LikeDTO likeDto)
 	{
 		try
 		{
 			// 직접 추가로 UI 빠르게 갱신 및 초기화 비용 절약
 			postDto.AddLikeDto(likeDto);
-			await _repository.AddLike(likeDto, postDto);
+			await _repository.AddLike(postDto, likeDto);
 			OnDataChanged?.Invoke();
 			return true;
 		}
@@ -73,7 +73,7 @@ public class PostManager : Singleton<PostManager>
 		OnDataChanged?.Invoke();
 	}
 
-	public async Task<bool> TryRemoveLike(LikeDTO likeDto, PostDTO postDto)
+	public async Task<bool> TryRemoveLike(PostDTO postDto, LikeDTO likeDto)
 	{
 		try
 		{
