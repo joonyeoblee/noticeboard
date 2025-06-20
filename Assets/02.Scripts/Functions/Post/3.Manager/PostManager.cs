@@ -10,6 +10,8 @@ public class PostManager : Singleton<PostManager>
 	public List<PostDTO> Posts => _posts;
 	public event Action OnDataChanged;
 	
+	public int limit;
+	
 	public LikeDTO likeDto;
 	
 	public GameObject Comments;
@@ -73,8 +75,23 @@ public class PostManager : Singleton<PostManager>
 
 	public async Task OpenComments()
 	{
-		_posts = await _repository.GetPosts(0, 3);
+		_posts = await _repository.GetPosts(0, limit);
 		OnDataChanged?.Invoke();
 	}
 
+	public async Task<bool> TryRemoveLike(string postId, LikeDTO likeDto)
+	{
+		try
+		{
+			PostDTO post = _posts.FirstOrDefault(p => p.PostID == postId);
+			_repository.RemoveLike(postId, likeDto);
+			OnDataChanged?.Invoke();
+			return true;
+		}
+		catch (Exception e)
+		{
+			Debug.LogError($"Upload failed: {e.Message}");
+			return false;
+		}
+	}
 }
