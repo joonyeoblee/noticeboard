@@ -11,13 +11,11 @@ public class PostDTO
 	public string PostID { get; private set; }
 	[FirestoreProperty]
 	public string Content { get; private set; }
-	[FirestoreProperty]
-	public int Like { get; private set; }
+	public int LikeCount { get; private set; }
 	[FirestoreProperty]
 	public int ViewCount { get; private set; }
 	[FirestoreProperty]
 	public Timestamp PostTime { get; private set;}
-	[FirestoreProperty]
 	public List<LikeDTO> Likes { get; private set;} = new List<LikeDTO>(); // 좋아요 리스트 추가
 	[FirestoreProperty]
 	public List<CommentDTO> Comments { get; private set;} = new List<CommentDTO>(); // 좋아요 리스트 추가
@@ -26,7 +24,7 @@ public class PostDTO
 	public void AddLike(LikeDTO like)
 	{
 		Likes.Add(like);
-		Like = Likes.Count;
+		LikeCount = Likes.Count;
 	}
 
 	public void AddComment(CommentDTO comment)
@@ -37,16 +35,21 @@ public class PostDTO
 	{
 
 	}
-	public PostDTO(string email, string nickname, string postID, string content, int like, int viewCount, Timestamp postTime)
+	public PostDTO(string email, string nickname, string postID, string content, int likeCount, int viewCount, Timestamp postTime)
 	{
 		Email = email;
 		Nickname = nickname;
 		PostID = postID;
 		Content = content;
-		Like = like;
+		LikeCount = likeCount;
 		ViewCount = viewCount;
 		PostTime = postTime;
 		
 	}
-	
+
+	public void RemoveLike(LikeDTO likeDto)
+	{
+		Likes.Remove(likeDto);
+		LikeCount = Likes.Count;
+	}
 }

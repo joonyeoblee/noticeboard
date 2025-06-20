@@ -35,7 +35,7 @@ public class UI_PostModify : MonoBehaviour
         // 내용만 바꾼 새로운 Post 생성
         Post modifiedPost = new Post(currentPost.Email
         , currentPost.Nickname, currentPost.Content
-        , newContent, currentPost.Like
+        , newContent, currentPost.LikeCount
         , currentPost.ViewCount, currentPost.PostTime);
 
         bool success = await PostManager.Instance.TryUpdatePost(modifiedPost);
