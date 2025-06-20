@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Firebase.Firestore;
 using UnityEngine;
@@ -48,14 +47,14 @@ public class PostRepository
 				foreach (var likeDoc in likeQuerySnapshot.Documents)
 				{
 					LikeDTO likeDto = likeDoc.ConvertTo<LikeDTO>();
-					postDto.AddLike(likeDto);  // AddLike 함수 사용
+					postDto.AddLikeDto(likeDto); // AddLike 함수 사용
 				}
 				postDtos.Add(postDto);
 			}
 		}
-		catch (System.Exception e)
+		catch (Exception e)
 		{
-			UnityEngine.Debug.LogError($"Error fetching posts: {e.Message}");
+			Debug.LogError($"Error fetching posts: {e.Message}");
 		}
 
 		return postDtos;
@@ -82,7 +81,7 @@ public class PostRepository
 				foreach (var likeDoc in likeQuerySnapshot.Documents)
 				{
 					LikeDTO likeDto = likeDoc.ConvertTo<LikeDTO>();
-					postDto.AddLike(likeDto);  // AddLike 함수 사용
+					postDto.AddLikeDto(likeDto); // AddLike 함수 사용
 				}
 	
 			}
@@ -142,13 +141,13 @@ public class PostRepository
 	}
 
 
-	public async Task AddLike(LikeDTO likeDto, string postId)
+	public async Task AddLike(LikeDTO likeDto, PostDTO postDto)
 	{
 		try
 		{
 			// postId 문서의 하위 컬렉션 'Like'에 likeId를 문서 ID로 사용
 			string likeId = likeDto.LikeID ?? Guid.NewGuid().ToString(); // null 방지
-			DocumentReference likeRef = _db.Collection("Post").Document(postId)
+			DocumentReference likeRef = _db.Collection("Post").Document(postDto.PostID)
 				.Collection("Like").Document(likeId);
 
 			await likeRef.SetAsync(likeDto);

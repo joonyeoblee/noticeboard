@@ -11,10 +11,10 @@
 		{
 			Write.SetActive(true);
 		}
-		public void ModifyObject(string id)
+		public void ModifyObject(PostDTO postDto)
 		{
 			Modify.SetActive(true);
-			Modify.GetComponent<UI_PostModify>().Init(id);
+			Modify.GetComponent<UI_PostModify>().Refresh(postDto);
 		}
 		public async void Close()
 		{
