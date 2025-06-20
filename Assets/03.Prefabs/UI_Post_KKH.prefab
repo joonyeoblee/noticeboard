@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2678497019864668860}
   - component: {fileID: 8848361768815876145}
   m_Layer: 0
-  m_Name: UI_Post
+  m_Name: UI_Post_KKH
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2075,9 +2075,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8848361768815876145}
-        m_TargetAssemblyTypeName: UI_Post, Assembly-CSharp
-        m_MethodName: OnClickModifyButton
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UI_PostModify, Assembly-CSharp
+        m_MethodName: UpdatePost
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

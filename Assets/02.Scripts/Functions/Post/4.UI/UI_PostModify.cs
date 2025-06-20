@@ -6,24 +6,32 @@ public class UI_PostModify : MonoBehaviour
 {
     public TMP_InputField ModifyContentInputField;
 
-    public string CurrentPostID;
+    private string _currentPostID;
+    private PostDTO _currentPost;
 
-    public async void UpdatePost()
+    public void Init(string id)
     {
-        if (string.IsNullOrEmpty(CurrentPostID))
+        if (string.IsNullOrEmpty(id))
         {
             Debug.LogWarning("수정할 PostID가 설정되지 않았습니다.");
             return;
         }
-
-        PostDTO currentPost = PostManager.Instance.Posts.Find(t => t.PostID == CurrentPostID);
-
-        if (currentPost == null)
+        
+        _currentPostID = id;
+        _currentPost = PostManager.Instance.Posts.Find(t => t.PostID == _currentPostID);
+        
+        if (_currentPost == null)
         {
-            Debug.LogWarning($"PostID {CurrentPostID}에 해당하는 게시글을 찾을 수 없습니다.");
+            Debug.LogWarning($"PostID {_currentPostID}에 해당하는 게시글을 찾을 수 없습니다.");
             return;
         }
+        ModifyContentInputField.text = _currentPost.Content;
 
+    }
+    public async void UpdatePost()
+    {
+
+       Debug.Log($"CurrentPostDTOID : {_currentPost.PostID}");
         string newContent = ModifyContentInputField.text;
 
         if (string.IsNullOrWhiteSpace(newContent))
@@ -33,16 +41,19 @@ public class UI_PostModify : MonoBehaviour
         }
 
         // 내용만 바꾼 새로운 Post 생성
-        Post modifiedPost = new Post(currentPost.Email
-        , currentPost.Nickname, currentPost.Content
-        , newContent, currentPost.LikeCount
-        , currentPost.ViewCount, currentPost.PostTime);
+        Post modifiedPost = new Post(_currentPost.Email
+        , _currentPost.Nickname, _currentPost.PostID
+        , newContent, _currentPost.LikeCount
+        , _currentPost.ViewCount, _currentPost.PostTime);
+        
+        Debug.Log($"PostID = {modifiedPost.PostID}");
 
         bool success = await PostManager.Instance.TryUpdatePost(modifiedPost);
 
         if (success)
         {
             Debug.Log("게시글 수정 성공");
+            gameObject.GetComponentInParent<UI_Canvas>().Close();
         }
         else
         {

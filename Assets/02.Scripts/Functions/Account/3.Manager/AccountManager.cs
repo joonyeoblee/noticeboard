@@ -8,7 +8,7 @@ public class AccountManager : Singleton<AccountManager>
 {
     private AccountRepository _repository;
 
-    public AccountDTO CurrentAccount = new AccountDTO("12223@12222123.com","어느보데");
+    public AccountDTO CurrentAccount = new AccountDTO("kkk@kkk.com","허허허");
 
     private async void Start()
     {
