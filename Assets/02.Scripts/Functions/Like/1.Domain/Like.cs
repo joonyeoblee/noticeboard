@@ -1,7 +1,7 @@
 ﻿using System;
-
 public class Like
 {
+	public readonly string LikeId;
 	public readonly string Email;
 	public readonly string Nickname;
 
@@ -14,7 +14,6 @@ public class Like
 		AccountNicknameSpecification nicknameSpecification = new AccountNicknameSpecification();
 		if (!nicknameSpecification.IsSatisfiedBy(nickname)) throw new Exception(nicknameSpecification.ErrorMessage);
 
-		
 		Email = email;
 		Nickname = nickname;
 	}

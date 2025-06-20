@@ -17,7 +17,13 @@ public class UI_PostList : MonoBehaviour
 	public void Refresh()
 	{
 		_postDtos = PostManager.Instance.PostDtos;
-		
+		foreach (PostDTO postDto in _postDtos)
+		{
+			foreach (LikeDTO likeDto in postDto.Likes)
+			{
+				Debug.Log(likeDto.Email);
+			}
+		}
 		int postCount = _postDtos?.Count ?? 0;
 		int limit = PostManager.Instance.Limit;
 		int count = Mathf.Min(postCount, limit);
