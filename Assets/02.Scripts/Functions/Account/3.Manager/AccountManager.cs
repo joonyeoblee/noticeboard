@@ -8,7 +8,7 @@ public class AccountManager : Singleton<AccountManager>
 {
     private AccountRepository _repository;
 
-    public AccountDTO CurrentAccount = new AccountDTO("kkk@kkk.com","허허허");
+    public AccountDTO CurrentAccount = new AccountDTO("1231123@aa.com","너는뭐야");
 
     private async void Start()
     {
@@ -22,7 +22,7 @@ public class AccountManager : Singleton<AccountManager>
     {
         try
         {
-            await _repository.LoginAsync(email, password);
+            CurrentAccount = await _repository.LoginAsync(email, password);
             Debug.Log($"[AccountManager] Login 성공 : {email}");
 
             // FirebaseUser에서 추가 정보 가져와서 Account 객체 초기화 (선택 사항)
@@ -38,7 +38,7 @@ public class AccountManager : Singleton<AccountManager>
     {
         try
         {
-            CurrentAccount = await _repository.RegisterAsync(email, nickname, password);
+           await _repository.RegisterAsync(email, nickname, password);
 
             Debug.Log($"[AccountManager] Register 완료: {email}");
         }

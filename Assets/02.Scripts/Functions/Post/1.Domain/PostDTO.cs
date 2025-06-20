@@ -55,4 +55,13 @@ public class PostDTO
 	{
 		Likes.Remove(likeDto);
 	}
+
+	public void AddLikeDto(LikeDTO likeDto)
+	{
+		Likes.Add(likeDto);
+	}
+	public void AddCommentDto(LikeDTO likeDto)
+	{
+		Likes.Add(likeDto);
+	}
 }

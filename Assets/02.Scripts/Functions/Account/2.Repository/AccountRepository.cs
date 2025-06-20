@@ -16,7 +16,7 @@ public class AccountRepository
         _auth = auth;
     }
 
-    public async Task<AccountDTO> RegisterAsync(string email, string nickname, string password)
+    public async Task RegisterAsync(string email, string nickname, string password)
     {
         try
         {
@@ -34,7 +34,6 @@ public class AccountRepository
 
             await _db.Collection("Account").Document(email).SetAsync(accountDto);
             Debug.Log("[AccountRepository] Firestore 사용자 정보 저장 성공");
-            return accountDto;
         }
         catch (Exception ex)
         {
@@ -43,10 +42,9 @@ public class AccountRepository
         }
         
     }
-    public async Task LoginAsync(string email, string password)
+    public async Task<AccountDTO> LoginAsync(string email, string password)
     {
         AuthResult result = await _auth.SignInWithEmailAndPasswordAsync(email, password);
-        Debug.Log($"로그인 성공 : {result.User.DisplayName}");
-        
+        return new AccountDTO(email, result.User.DisplayName);
     }
 }
