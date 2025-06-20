@@ -12,51 +12,29 @@ public class PostManager : Singleton<PostManager>
 	private async void Start()
 	{
 		await FirebaseConnect.Instance.Initialization;
-
 		_repository = new PostRepository(FirebaseConnect.Instance.Db);
-		
 	}
 
 	public async Task TryAddPost(PostDTO postDto)
 	{
-		try
-		{
-			await _repository.AddPost(postDto);
-			OnDataChanged?.Invoke();
-		}
-		catch (Exception e)
-		{
-			Debug.LogError($"Upload failed: {e.Message}");
-			throw;
-		}
+		await _repository.AddPost(postDto);
+		OnDataChanged?.Invoke();
 	}
 
 	public async Task<bool> TryAddLike(PostDTO postDto, Like like)
 	{
+		Post post = new Post(postDto);
+		post.AddLike(like);
 
-		bool success = await _repository.AddLike(postDto, like.ToDto());
-
-		if (success)
+		int index = PostDtos.FindIndex(p => p.PostID == post.PostID);
+		if (index != -1)
 		{
-			Post post = new Post(postDto);
-			post.AddLike(like);
-
-			int index = PostDtos.FindIndex(p => p.PostID == post.PostID);
-			if (index != -1)
-			{
-				PostDtos[index] = post.ToDto();
-				Debug.LogError(PostDtos[index].LikeCount); // Log the updated count
-			}
-
-			OnDataChanged?.Invoke();
-			return true;
+			PostDtos[index] = post.ToDto();
 		}
-		else
-		{
-			Debug.LogError("Failed to add like to repository.");
-			return false;
-		}
-	
+
+		OnDataChanged?.Invoke();
+
+		return await _repository.AddLike(postDto, like.ToDto());
 	}
 	public async Task<bool> TryUpdatePost(Post post)
 	{
@@ -68,13 +46,11 @@ public class PostManager : Singleton<PostManager>
 	public async Task OpenComments()
 	{
 		PostDtos = await _repository.GetPosts(0, Limit);
-		
 		OnDataChanged?.Invoke();
 	}
 
 	public async Task<bool> TryRemoveLike(PostDTO postDto, LikeDTO likeDto)
 	{
-
 		Post post = new Post(postDto);
 		post.RemoveLike(likeDto.ToDomain());
 		int index = PostDtos.FindIndex(p => p.PostID == post.PostID);
@@ -83,10 +59,9 @@ public class PostManager : Singleton<PostManager>
 			PostDtos[index] = post.ToDto();
 			Debug.LogError(PostDtos[index].LikeCount); // Log the updated count
 		}
-		await _repository.RemoveLike(postDto, likeDto);
-
+		
 		OnDataChanged?.Invoke();
-		return true;
+		return await _repository.RemoveLike(postDto, likeDto);
 	}
 
 	public PostDTO GetPostById(string postId)

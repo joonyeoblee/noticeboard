@@ -24984,11 +24984,11 @@ MonoBehaviour:
   Login: {fileID: 6682800754293737609}
   Details: {fileID: 1885218549}
   Panels:
-  - {fileID: 332045726}
+  - {fileID: 6682800754293737609}
   - {fileID: 606084386493279256}
   - {fileID: 748302268312938842}
-  - {fileID: 6682800754293737609}
   - {fileID: 1885218549}
+  - {fileID: 332045726}
 --- !u!224 &8914945238579350954
 RectTransform:
   m_ObjectHideFlags: 0

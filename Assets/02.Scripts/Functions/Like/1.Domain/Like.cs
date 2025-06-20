@@ -1,7 +1,6 @@
 ﻿using System;
 public class Like
 {
-	public readonly string LikeId;
 	public readonly string Email;
 	public readonly string Nickname;
 

@@ -182,7 +182,7 @@ public class PostRepository
 			throw;
 		}
 	}
-	public async Task RemoveLike(PostDTO postDto, LikeDTO likeDto)
+	public async Task<bool> RemoveLike(PostDTO postDto, LikeDTO likeDto)
 	{
 		try
 		{
@@ -192,10 +192,11 @@ public class PostRepository
 				.Collection("Like").Document(likeDto.Email);
 
 			await likeRef.DeleteAsync();
+			return true;
 		}
 		catch (Exception e)
 		{
-			
+			return false;
 		}
 	}
 }
