@@ -11,8 +11,6 @@ public class PostManager : Singleton<PostManager>
 	
 	public int limit;
 	
-	public LikeDTO likeDto;
-	
 	public GameObject Comments;
 	private async void Start()
 	{
@@ -36,13 +34,21 @@ public class PostManager : Singleton<PostManager>
 		}
 	}
 
-	public async Task<bool> TryAddLike(PostDTO postDto, LikeDTO likeDto)
+	public async Task<bool> TryAddLike(PostDTO postDto, Like like)
 	{
 		try
 		{
 			// 직접 추가로 UI 빠르게 갱신 및 초기화 비용 절약
-			postDto.AddLikeDto(likeDto);
-			await _repository.AddLike(postDto, likeDto);
+			Post post = new Post(postDto);
+			post.AddLike(like);
+			// 기존 리스트에서 동일한 ID의 요소 찾아서 교체
+			int index = _posts.FindIndex(p => p.PostID == post.PostID);
+			if (index != -1)
+			{
+				_posts[index] = post.ToDto();
+			}
+
+			await _repository.AddLike(postDto, like.ToDto());
 			OnDataChanged?.Invoke();
 			return true;
 		}

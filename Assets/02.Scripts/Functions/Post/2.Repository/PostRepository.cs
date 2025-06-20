@@ -20,7 +20,8 @@ public class PostRepository
 	public async Task<List<PostDTO>> GetPosts(int start, int limit)
 	{
 		List<PostDTO> postDtos = new List<PostDTO>();
-
+		List<LikeDTO> likeDtos = new List<LikeDTO>();
+		List<CommentDTO> commentDtos = new List<CommentDTO>();
 		try
 		{
 			// "PostTime" 기준으로 내림차순 정렬하여 최신 게시글부터 가져옴
@@ -39,16 +40,29 @@ public class PostRepository
 
 				// 좋아요 서브컬렉션에서 좋아요 수 가져오기
 				var likeQuerySnapshot = await _db.Collection("Post")
-					.Document(doc.Id)
+					.Document(postDto.PostID)
 					.Collection("Like")
 					.GetSnapshotAsync();
-
 				// 좋아요 데이터를 PostDTO에 추가
 				foreach (var likeDoc in likeQuerySnapshot.Documents)
 				{
 					LikeDTO likeDto = likeDoc.ConvertTo<LikeDTO>();
-					postDto.AddLikeDto(likeDto); // AddLike 함수 사용
+					likeDtos.Add(likeDto);
 				}
+
+				// 좋아요 서브컬렉션에서 좋아요 수 가져오기
+				QuerySnapshot CommentQuerySnapshot = await _db.Collection("Post")
+					.Document(postDto.PostID)
+					.Collection("Comment")
+					.GetSnapshotAsync();
+				// 좋아요 데이터를 PostDTO에 추가
+				foreach (DocumentSnapshot CommentDoc in CommentQuerySnapshot.Documents)
+				{
+					CommentDTO CommentDto = CommentDoc.ConvertTo<CommentDTO>();
+					commentDtos.Add(CommentDto);
+				}
+
+				postDto = new PostDTO(postDto, likeDtos, commentDtos);
 				postDtos.Add(postDto);
 			}
 		}
@@ -63,6 +77,8 @@ public class PostRepository
 	public async Task<PostDTO> GetPost(string postId)
 	{
 		PostDTO postDto = null;
+		List<LikeDTO> likeDtos = new List<LikeDTO>();
+		List<CommentDTO> commentDtos = new List<CommentDTO>();
 		try
 		{
 			DocumentReference docRef = _db.Collection("Post").Document(postId);
@@ -81,9 +97,23 @@ public class PostRepository
 				foreach (var likeDoc in likeQuerySnapshot.Documents)
 				{
 					LikeDTO likeDto = likeDoc.ConvertTo<LikeDTO>();
-					postDto.AddLikeDto(likeDto); // AddLike 함수 사용
+					likeDtos.Add(likeDto);
 				}
-	
+
+				// 좋아요 서브컬렉션에서 좋아요 수 가져오기
+				QuerySnapshot CommentQuerySnapshot = await _db.Collection("Post")
+					.Document(postId)
+					.Collection("Comment")
+					.GetSnapshotAsync();
+				// 좋아요 데이터를 PostDTO에 추가
+				foreach (DocumentSnapshot CommentDoc in CommentQuerySnapshot.Documents)
+				{
+					CommentDTO CommentDto = CommentDoc.ConvertTo<CommentDTO>();
+					commentDtos.Add(CommentDto);
+				}
+
+				postDto = new PostDTO(postDto, likeDtos, commentDtos);
+				
 			}
 			else
 			{

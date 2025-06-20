@@ -23,20 +23,11 @@ public class PostDTO
 	public int CommentCount => Comments.Count;
 
 	// 좋아요 추가하는 메소드
-	public void AddLikeDto(LikeDTO like)
-	{
-		Likes.Add(like);
-	}
-
-	public void AddComment(CommentDTO comment)
-	{
-		Comments.Add(comment);
-	}
 	public PostDTO()
 	{
 
 	}
-	public PostDTO(string email, string nickname, string postID, string content, int viewCount, Timestamp postTime)
+	public PostDTO(string email, string nickname, string postID, string content, int viewCount, Timestamp postTime, List<LikeDTO> likes, List<CommentDTO> comments)
 	{
 		Email = email;
 		Nickname = nickname;
@@ -44,7 +35,20 @@ public class PostDTO
 		Content = content;
 		ViewCount = viewCount;
 		PostTime = postTime;
-		
+		Likes = likes;
+		Comments = comments;
+	}
+
+	public PostDTO(PostDTO postDto, List<LikeDTO> likes, List<CommentDTO> comments)
+	{
+		Email = postDto.Email;
+		Nickname = postDto.Nickname;
+		PostID = postDto.PostID;
+		Content = postDto.Content;
+		ViewCount = postDto.ViewCount;
+		PostTime = postDto.PostTime;
+		Likes = likes;
+		Comments = comments;
 	}
 
 	public void RemoveLikeDto(LikeDTO likeDto)
