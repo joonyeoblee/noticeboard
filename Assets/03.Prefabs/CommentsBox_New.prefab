@@ -20,7 +20,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1044939013086753126
 RectTransform:
   m_ObjectHideFlags: 0
@@ -134,6 +134,10 @@ MonoBehaviour:
   NameTextUI: {fileID: 783868354749577550}
   ContentTextUI: {fileID: 1897284928790783175}
   LikeCountTextUI: {fileID: 8898328955661635553}
+  LikeButton: {fileID: 8078180155146678158}
+  LikeImage:
+  - {fileID: 3797115490308490668}
+  - {fileID: 7986010546697261390}
 --- !u!1 &1052470629170830726
 GameObject:
   m_ObjectHideFlags: 0
@@ -172,8 +176,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 450, y: 0}
-  m_SizeDelta: {x: 900, y: 0}
+  m_AnchoredPosition: {x: 441.78, y: 0}
+  m_SizeDelta: {x: 883.56, y: 125.12}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &3211020652156227647
 CanvasRenderer:
@@ -286,10 +290,10 @@ RectTransform:
   - {fileID: 2991665200238557739}
   m_Father: {fileID: 5682810414715255311}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 495.78, y: -33.655}
+  m_SizeDelta: {x: 775.56, y: 35.31}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &611296905579051117
 CanvasRenderer:
@@ -424,7 +428,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 21.288, y: 0}
+  m_AnchoredPosition: {x: 21.288002, y: 0}
   m_SizeDelta: {x: 31.29, y: 31.2897}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2728206572360547742
@@ -497,10 +501,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 5682810414715255311}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 495.78, y: -71.51}
+  m_SizeDelta: {x: 775.56, y: 30.66}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8134246349975946795
 CanvasRenderer:
@@ -636,8 +640,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 504, y: -91.71}
-  m_SizeDelta: {x: 792, y: 0}
+  m_AnchoredPosition: {x: 495.78, y: -91.71}
+  m_SizeDelta: {x: 775.56, y: 33.41}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &4167188137318610874
 CanvasRenderer:
@@ -923,7 +927,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 50.8, y: -49.7}
+  m_AnchoredPosition: {x: 50.799988, y: -49.7}
   m_SizeDelta: {x: 88.05, y: 83.2987}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9023534199998548460
@@ -1018,7 +1022,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 21.288, y: 0}
+  m_AnchoredPosition: {x: 21.288002, y: 0}
   m_SizeDelta: {x: 31.29, y: 31.2897}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8123141880088522360
@@ -1143,8 +1147,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0}
-  m_SizeDelta: {x: 900, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 883.56, y: 125.12}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &2339718421032505157
 CanvasRenderer:
@@ -1347,7 +1351,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7303526420931053311}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3597287549009835434}
+        m_TargetAssemblyTypeName: UI_Comment, Assembly-CSharp
+        m_MethodName: ToggleCommentLike
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &3238295396987090590
 MonoBehaviour:
   m_ObjectHideFlags: 0

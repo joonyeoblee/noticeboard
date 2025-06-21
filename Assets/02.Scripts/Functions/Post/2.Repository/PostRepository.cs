@@ -56,6 +56,24 @@ public class PostRepository
 				foreach (DocumentSnapshot commentDoc in commentQuerySnapshot.Documents)
 				{
 					CommentDTO commentDto = commentDoc.ConvertTo<CommentDTO>();
+					
+					// 댓글의 좋아요 로드
+					List<LikeDTO> commentLikes = new List<LikeDTO>();
+					var commentLikeSnapshot = await _db.Collection("Post")
+						.Document(postDto.PostID)
+						.Collection("Comment")
+						.Document(commentDto.CommentID)
+						.Collection("Like")
+						.GetSnapshotAsync();
+					
+					foreach (var commentLikeDoc in commentLikeSnapshot.Documents)
+					{
+						LikeDTO commentLike = commentLikeDoc.ConvertTo<LikeDTO>();
+						commentLikes.Add(commentLike);
+					}
+					
+					// 좋아요가 포함된 댓글 DTO 생성
+					commentDto = new CommentDTO(commentDto, commentLikes);
 					commentDtos.Add(commentDto);
 				}
 
@@ -104,6 +122,24 @@ public class PostRepository
 				foreach (DocumentSnapshot CommentDoc in CommentQuerySnapshot.Documents)
 				{
 					CommentDTO CommentDto = CommentDoc.ConvertTo<CommentDTO>();
+					
+					// 댓글의 좋아요 로드
+					List<LikeDTO> commentLikes = new List<LikeDTO>();
+					var commentLikeSnapshot = await _db.Collection("Post")
+						.Document(postId)
+						.Collection("Comment")
+						.Document(CommentDto.CommentID)
+						.Collection("Like")
+						.GetSnapshotAsync();
+					
+					foreach (var commentLikeDoc in commentLikeSnapshot.Documents)
+					{
+						LikeDTO commentLike = commentLikeDoc.ConvertTo<LikeDTO>();
+						commentLikes.Add(commentLike);
+					}
+					
+					// 좋아요가 포함된 댓글 DTO 생성
+					CommentDto = new CommentDTO(CommentDto, commentLikes);
 					commentDtos.Add(CommentDto);
 				}
 

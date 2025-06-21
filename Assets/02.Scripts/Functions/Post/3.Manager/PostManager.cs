@@ -6,7 +6,7 @@ public class PostManager : Singleton<PostManager>
 {
 	private PostRepository _repository;
 	public List<PostDTO> PostDtos { get; set; }
-	public event Action OnDataChanged;
+	public Action OnDataChanged;
 	public int Limit { get; } = 10;
 	
 	private async void Start()
@@ -44,7 +44,7 @@ public class PostManager : Singleton<PostManager>
 		}
 
 		OnDataChanged?.Invoke();
-		CommentManager.Instance.InvokeAction(PostDtos[index]);
+		// CommentManager.Instance.InvokeAction(PostDtos[index]);
 		return await _repository.AddLike(postDto, like.ToDto());
 	}
 	
@@ -65,7 +65,7 @@ public class PostManager : Singleton<PostManager>
 		}
 		
 		OnDataChanged?.Invoke();
-		CommentManager.Instance.InvokeAction(PostDtos[index]);
+		// CommentManager.Instance.InvokeAction(PostDtos[index]);
 		return await _repository.RemoveLike(postDto, likeDto);
 	}
 
