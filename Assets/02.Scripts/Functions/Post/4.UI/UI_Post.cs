@@ -19,7 +19,7 @@ public class UI_Post : MonoBehaviour
 	public GameObject CommentPanel;
 	
 	private PostDTO _post;
-	
+
 	public void Refresh(PostDTO postDto)
 	{
 		_post = postDto;
@@ -35,15 +35,18 @@ public class UI_Post : MonoBehaviour
 		{
 			LikeAndCommentTextUI.text = $"좋아요 {_post.Likes.Count}, 댓글 {_post.Comments.Count}";
 		}
+
+		bool isMyPost = _post.Email == AccountManager.Instance.CurrentAccount.Email;
+		DropdownButton.gameObject.SetActive(isMyPost);
+		
 	}
 
-	public void OnClickModifyButton()
+	public void OnClickMenuButton()
 	{
-		UI_Canvas canvas = gameObject.GetComponentInParent<UI_Canvas>();
-
-		if (canvas == null) return;
-
-		canvas.ModifyObject(_post);
+		GameObject Popup = UI_Canvas.Instance.Popup;
+		Popup.SetActive(true);
+		Popup.transform.position = DropdownButton.gameObject.transform.position;
+		Popup.GetComponent<UI_MenuPopup>().Refresh(_post);
 	}
 
 	public void OnClickCommentButton()

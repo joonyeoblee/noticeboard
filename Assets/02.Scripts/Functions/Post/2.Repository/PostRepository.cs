@@ -149,19 +149,19 @@ public class PostRepository
 	}
 
 
-	public async Task DeletePost(string postId)
+	public async Task<bool> DeletePost(PostDTO postDto)
 	{
 		try
 		{
-			DocumentReference docRef = _db.Collection("Post").Document(postId);
+			DocumentReference docRef = _db.Collection("Post").Document(postDto.PostID);
 			await docRef.DeleteAsync();
-			// 댓글 좋아요 별도 처리 필요
-			Debug.Log($"[PostRepository] 게시글 {postId} 삭제 완료");
+			Debug.Log($"[PostRepository] 게시글 {postDto.PostID} 삭제 완료");
+			return true;
 		}
 		catch (Exception e)
 		{
 			Debug.LogError($"[PostRepository] 게시글 삭제 실패: {e.Message}");
-			throw;
+			return false;
 		}
 	}
 

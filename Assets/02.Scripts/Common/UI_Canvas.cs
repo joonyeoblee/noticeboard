@@ -2,7 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using UnityEngine;
-	public class UI_Canvas : MonoBehaviour
+	public class UI_Canvas : Singleton<UI_Canvas>
 	{
 		public GameObject Write;
 		public GameObject Posts;
@@ -12,6 +12,7 @@
 
 		public List<GameObject> Panels;
 
+		public GameObject Popup;
 
 		private void AllPanelActiveFalse()
 		{

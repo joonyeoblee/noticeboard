@@ -20,7 +20,18 @@ public class PostManager : Singleton<PostManager>
 		await _repository.AddPost(postDto);
 		OnDataChanged?.Invoke();
 	}
-
+	public async Task TryRemovePost(PostDTO postDto)
+	{
+		await _repository.DeletePost(postDto); 
+		OnDataChanged?.Invoke();
+		await OpenComments();
+	}
+	public async Task<bool> TryUpdatePost(Post post)
+	{
+		await _repository.UpdatePost(post.ToDto());
+		OnDataChanged?.Invoke();
+		return true;
+	}
 	public async Task<bool> TryAddLike(PostDTO postDto, Like like)
 	{
 		Post post = new Post(postDto);
@@ -36,13 +47,7 @@ public class PostManager : Singleton<PostManager>
 		CommentManager.Instance.InvokeAction(PostDtos[index]);
 		return await _repository.AddLike(postDto, like.ToDto());
 	}
-	public async Task<bool> TryUpdatePost(Post post)
-	{
-		await _repository.UpdatePost(post.ToDto());
-		OnDataChanged?.Invoke();
-		return true;
-	}
-
+	
 	public async Task OpenComments()
 	{
 		PostDtos = await _repository.GetPosts(0, Limit);
