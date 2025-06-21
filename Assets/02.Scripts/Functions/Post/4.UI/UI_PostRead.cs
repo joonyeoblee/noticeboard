@@ -27,6 +27,7 @@ public class UI_PostRead : MonoBehaviour
 		UI_Post.Refresh(_postDto);
 
 		int count = postDto.CommentCount;
+		Debug.Log(postDto.Likes.Count + "/" + postDto.Comments.Count);
 
 		EnsureCommentSlots(count); // 필요한 만큼 보장
 

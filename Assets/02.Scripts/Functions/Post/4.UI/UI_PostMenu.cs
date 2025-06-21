@@ -44,6 +44,9 @@ public class UI_PostMenu : MonoBehaviour
 		}
 		else
 		{
+			LikeImage[0].SetActive(true);
+			LikeImage[1].SetActive(false);
+			_isLiked = false;
 			Debug.LogError("Failed to add like");
 		}
 	}
@@ -62,6 +65,7 @@ public class UI_PostMenu : MonoBehaviour
 			LikeImage[0].SetActive(false);
 			LikeImage[1].SetActive(true);
 			_isLiked = true;
+			Debug.LogError("Failed to Remove like");
 		}
 	}
 

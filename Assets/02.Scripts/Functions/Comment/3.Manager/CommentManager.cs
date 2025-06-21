@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using UnityEngine;
 public class CommentManager : Singleton<CommentManager>
 {
 	private CommentRepository _repository;
 	public event Action<PostDTO> OnDataChanged;
-
 	private async void Start()
 	{
 		await FirebaseConnect.Instance.Initialization;
@@ -22,5 +22,11 @@ public class CommentManager : Singleton<CommentManager>
 		await _repository.AddComment(postDto, comment.ToDto());
 		OnDataChanged?.Invoke(postDto);
 		return true;
+	}
+
+	public void InvokeAction(PostDTO postDto)
+	{
+		Debug.Log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		OnDataChanged?.Invoke(postDto);
 	}
 }

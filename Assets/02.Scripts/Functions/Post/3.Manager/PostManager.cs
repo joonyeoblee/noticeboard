@@ -33,7 +33,7 @@ public class PostManager : Singleton<PostManager>
 		}
 
 		OnDataChanged?.Invoke();
-
+		CommentManager.Instance.InvokeAction(PostDtos[index]);
 		return await _repository.AddLike(postDto, like.ToDto());
 	}
 	public async Task<bool> TryUpdatePost(Post post)
@@ -57,10 +57,10 @@ public class PostManager : Singleton<PostManager>
 		if (index != -1)
 		{
 			PostDtos[index] = post.ToDto();
-			Debug.LogError(PostDtos[index].LikeCount); // Log the updated count
 		}
 		
 		OnDataChanged?.Invoke();
+		CommentManager.Instance.InvokeAction(PostDtos[index]);
 		return await _repository.RemoveLike(postDto, likeDto);
 	}
 
