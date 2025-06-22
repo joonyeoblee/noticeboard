@@ -21,10 +21,22 @@ public class CommentManager : Singleton<CommentManager>
         postDto = post.ToDto();
         await _repository.AddComment(postDto, comment.ToDto());
         PostDTO newLoadPostDto = await PostManager.Instance.TryGetPost(postDto);
+    
+        // PostManager의 PostDtos도 업데이트
+        var postInManager = PostManager.Instance.GetPostById(postDto.PostID);
+        if (postInManager != null)
+        {
+            int index = PostManager.Instance.PostDtos.FindIndex(p => p.PostID == postDto.PostID);
+            if (index != -1)
+            {
+                PostManager.Instance.PostDtos[index] = newLoadPostDto;
+            }
+        }
+    
+        PostManager.Instance.OnDataChanged?.Invoke(); // PostManager 이벤트도 발생
         OnDataChanged?.Invoke(newLoadPostDto);
         return true;
     }
-
     // 댓글 좋아요 추가
     public async Task<bool> TryAddCommentLike(PostDTO postDto, CommentDTO commentDto, Like like)
     {

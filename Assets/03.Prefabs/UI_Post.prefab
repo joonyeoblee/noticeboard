@@ -142,7 +142,6 @@ MonoBehaviour:
   ContentTextUI: {fileID: 3207482866067918817}
   LikeAndCommentTextUI: {fileID: 2211436976001012855}
   CommentPanel: {fileID: 0}
-  UI_MenuPopub: {fileID: 0}
 --- !u!1 &1058126985218252535
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,8 +511,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 441.78, y: -101.3465}
-  m_SizeDelta: {x: 883.56, y: 0}
+  m_AnchoredPosition: {x: 450.27884, y: -101.3465}
+  m_SizeDelta: {x: 900.5577, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &5183968761068237657
 CanvasRenderer:
@@ -1686,8 +1685,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 453.28, y: -12}
-  m_SizeDelta: {x: 860.56, y: 0}
+  m_AnchoredPosition: {x: 461.77884, y: -12}
+  m_SizeDelta: {x: 877.5577, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &7058192955698266360
 CanvasRenderer:

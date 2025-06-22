@@ -33,8 +33,10 @@ public class UI_Post : MonoBehaviour
 		ContentTextUI.text = _post.Content;
 		if (LikeAndCommentTextUI != null)
 		{
+			Debug.Log($"{_post.Likes.Count} Count");
 			LikeAndCommentTextUI.text = $"좋아요 {_post.Likes.Count}, 댓글 {_post.Comments.Count}";
 		}
+
 
 		bool isMyPost = _post.Email == AccountManager.Instance.CurrentAccount.Email;
 		DropdownButton.gameObject.SetActive(isMyPost);

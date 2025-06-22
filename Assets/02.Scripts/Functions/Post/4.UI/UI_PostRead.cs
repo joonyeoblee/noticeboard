@@ -17,27 +17,51 @@ public class UI_PostRead : MonoBehaviour
     private void Start()
     {
         CommentManager.Instance.OnDataChanged += Refresh;
+        PostManager.Instance.OnDataChanged += RefreshFromPostManager; // 추가
+    }
+
+    // PostManager 이벤트용 새로운 메서드
+    private void RefreshFromPostManager()
+    {
+        if (_postDto != null)
+        {
+            // PostManager에서 최신 PostDTO 가져오기
+            var updatedPost = PostManager.Instance.GetPostById(_postDto.PostID);
+            if (updatedPost != null)
+            {
+                Refresh(updatedPost);
+            }
+        }
     }
 
     public void Refresh(PostDTO postDto)
     {
         if (postDto == null) return;
 
-        _postDto = postDto;
+        // 최신 데이터를 PostManager에서 가져오기
+        var latestPost = PostManager.Instance.GetPostById(postDto.PostID);
+        if (latestPost != null)
+        {
+            _postDto = latestPost;
+        }
+        else
+        {
+            _postDto = postDto;
+        }
+
         UI_Post.Refresh(_postDto);
 
-        int count = postDto.CommentCount;
-        Debug.Log(postDto.Likes.Count + "/" + postDto.Comments.Count);
+        int count = _postDto.CommentCount;
+        Debug.Log(_postDto.Likes.Count + "/" + _postDto.Comments.Count);
 
-        EnsureCommentSlots(count); // 필요한 만큼 보장
+        EnsureCommentSlots(count);
 
         for (int i = 0; i < UI_Comments.Count; i++)
         {
             if (i < count)
             {
                 UI_Comments[i].gameObject.SetActive(true);
-                // PostDTO도 함께 전달
-                UI_Comments[i].Refresh(postDto.Comments[i], _postDto);
+                UI_Comments[i].Refresh(_postDto.Comments[i], _postDto);
             }
             else
             {

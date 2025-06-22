@@ -31,21 +31,15 @@ public class UI_PostMenu : MonoBehaviour
 	}
 	private async void Like()
 	{
+		
 		Like like = new Like(account.Email, account.Nickname);
 
 		if (await PostManager.Instance.TryAddLike(_post, like))
 		{
 			Debug.Log("Like added");
-			LikeImage[0].SetActive(false);
-			LikeImage[1].SetActive(true);
+			_isLiked = true;
 			_myLike = new LikeDTO(account.Email, account.Nickname);
-		}
-		else
-		{
-			LikeImage[0].SetActive(true);
-			LikeImage[1].SetActive(false);
-			_isLiked = false;
-			Debug.LogError("Failed to add like");
+			UpdateLikeUI();
 		}
 	}
 
@@ -54,19 +48,24 @@ public class UI_PostMenu : MonoBehaviour
 		if (await PostManager.Instance.TryRemoveLike(_post, _myLike))
 		{
 			Debug.Log("Like removed");
-			LikeImage[0].SetActive(true);
-			LikeImage[1].SetActive(false);
+			_isLiked = false;
 			_myLike = null;
+			UpdateLikeUI();
 		}
-		else
+	}
+	private void UpdateLikeUI()
+	{
+		if (_isLiked)
 		{
 			LikeImage[0].SetActive(false);
 			LikeImage[1].SetActive(true);
-			_isLiked = true;
-			Debug.LogError("Failed to Remove like");
+		}
+		else
+		{
+			LikeImage[0].SetActive(true);
+			LikeImage[1].SetActive(false);
 		}
 	}
-
 
 
 	// 버튼 클릭 시, isLike에 따라 Like 또는 UnLike 함수를 호출
