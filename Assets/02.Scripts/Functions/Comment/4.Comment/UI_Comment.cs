@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UI_Comment : MonoBehaviour
 {
     public TextMeshProUGUI NameTextUI;
+    public TextMeshProUGUI CommentTimeTextUI;
     public TextMeshProUGUI ContentTextUI;
     public TextMeshProUGUI LikeCountTextUI;
 	
@@ -29,7 +30,7 @@ public class UI_Comment : MonoBehaviour
         if (NameTextUI != null) NameTextUI.text = commentDTO.Nickname;
         if (ContentTextUI != null) ContentTextUI.text = commentDTO.Content;
         if (LikeCountTextUI != null) LikeCountTextUI.text = commentDTO.LikeCount.ToString();
-		
+		if(CommentTimeTextUI != null) CommentTimeTextUI.text = DisplayTimestamp.GetPrettyTimeAgo(commentDTO.CommentTime);
         // 현재 계정 체크
         if (account == null)
         {
