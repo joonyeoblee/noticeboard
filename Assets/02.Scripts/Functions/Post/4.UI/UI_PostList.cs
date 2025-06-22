@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 public class UI_PostList : MonoBehaviour
 {
 	public List<UI_Post> _ui_Posts;

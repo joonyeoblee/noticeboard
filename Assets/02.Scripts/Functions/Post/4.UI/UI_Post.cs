@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,6 +20,7 @@ public class UI_Post : MonoBehaviour
 	public GameObject CommentPanel;
 	
 	private PostDTO _post;
+
 
 	public void Refresh(PostDTO postDto)
 	{
@@ -47,10 +49,10 @@ public class UI_Post : MonoBehaviour
 	{
 		GameObject Popup = UI_Canvas.Instance.Popup;
 		Popup.SetActive(true);
-		Popup.transform.position = DropdownButton.gameObject.transform.position;
+		Popup.transform.position = DropdownButton.transform.position;
+        Popup.GetComponent<UI_MenuPopup>().IsComment = false;
 		Popup.GetComponent<UI_MenuPopup>().Refresh(_post);
 	}
-
 	public void OnClickCommentButton()
 	{
 		CommentPanel.SetActive(true);

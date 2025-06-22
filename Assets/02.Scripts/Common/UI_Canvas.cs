@@ -30,6 +30,7 @@
 			Modify.SetActive(true);
 			Modify.GetComponent<UI_PostModify>().Refresh(postDto);
 		}
+
 		public void LoginAndOpenPost()
 		{
 			Login.SetActive(false);
@@ -53,6 +54,7 @@
 			Modify.SetActive(false);
 			await PostManager.Instance.OpenComments();
 		}
+
 
 	
 	}

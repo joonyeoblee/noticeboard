@@ -10,7 +10,6 @@ public class CommentManager : Singleton<CommentManager>
         await FirebaseConnect.Instance.Initialization;
 
         _repository = new CommentRepository(FirebaseConnect.Instance.Db);
-
     }
 
 
@@ -37,6 +36,35 @@ public class CommentManager : Singleton<CommentManager>
         OnDataChanged?.Invoke(newLoadPostDto);
         return true;
     }
+    public async Task<bool> TryUpdateComment(PostDTO postDto, CommentDTO commentDto, string newContent)
+    {
+        // 수정된 내용으로 CommentDTO 생성
+        CommentDTO updatedCommentDto = new CommentDTO(commentDto.CommentID, commentDto.Email, commentDto.Nickname, newContent, commentDto.CommentTime);
+    
+        bool success = await _repository.UpdateComment(postDto, updatedCommentDto);
+    
+        if (success)
+        {
+            // 로컬 데이터 업데이트
+            PostDTO newLoadPostDto = await PostManager.Instance.TryGetPost(postDto);
+        
+            // PostManager의 PostDtos도 업데이트
+            var postInManager = PostManager.Instance.GetPostById(postDto.PostID);
+            if (postInManager != null)
+            {
+                int index = PostManager.Instance.PostDtos.FindIndex(p => p.PostID == postDto.PostID);
+                if (index != -1)
+                {
+                    PostManager.Instance.PostDtos[index] = newLoadPostDto;
+                }
+            }
+        
+            PostManager.Instance.OnDataChanged?.Invoke();
+            OnDataChanged?.Invoke(newLoadPostDto);
+        }
+    
+        return success;
+    }
     // 댓글 좋아요 추가
     public async Task<bool> TryAddCommentLike(PostDTO postDto, CommentDTO commentDto, Like like)
     {
@@ -48,6 +76,11 @@ public class CommentManager : Singleton<CommentManager>
             OnDataChanged?.Invoke(postDto);
         }
         return success;
+    }
+    public async Task TryRemoveComment(PostDTO postDto, CommentDTO commentDto)
+    {
+        await _repository.RemoveComment(postDto, commentDto); 
+        OnDataChanged?.Invoke(postDto);
     }
 
     // 댓글 좋아요 제거
