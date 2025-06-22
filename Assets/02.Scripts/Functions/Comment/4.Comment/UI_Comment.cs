@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class UI_Comment : MonoBehaviour
     public TextMeshProUGUI CommentTimeTextUI;
     public TextMeshProUGUI ContentTextUI;
     public TextMeshProUGUI LikeCountTextUI;
+    public TMP_InputField ModifyInputField; 
+	public Button DropdownButton;
 	
     // 댓글 좋아요 기능
     public Button LikeButton;
@@ -20,7 +23,15 @@ public class UI_Comment : MonoBehaviour
     private LikeDTO _myLike;
 
     AccountDTO account => AccountManager.Instance.CurrentAccount;
-	
+
+    private void Start()
+    {
+        ModifyInputField.onEndEdit.AddListener(OnModifyCommentEndEdit);
+    }
+    public PostDTO GetPostDTO()
+    {
+        return _postDto;
+    }
     public void Refresh(CommentDTO commentDTO, PostDTO postDto)
     {
         _commentDto = commentDTO;
@@ -37,7 +48,15 @@ public class UI_Comment : MonoBehaviour
             Debug.LogError("Current account is null");
             return;
         }
-		
+        var latestPost = PostManager.Instance.GetPostById(postDto.PostID);
+        if (latestPost != null)
+        {
+            _postDto = latestPost;
+        }
+        else
+        {
+            _postDto = postDto;
+        }
         if (_commentDto.Likes != null && _commentDto.Likes.Any(like => like.Email == account.Email))
         {
             _isLiked = true;
@@ -52,8 +71,44 @@ public class UI_Comment : MonoBehaviour
             LikeImage[0].SetActive(true);
             LikeImage[1].SetActive(false);
         }
+        
+        bool isMyPost = _postDto.Email == AccountManager.Instance.CurrentAccount.Email;
+        DropdownButton.gameObject.SetActive(isMyPost);
     }
-    
+    public void OnClickMenuButton()
+    {
+        GameObject Popup = UI_Canvas.Instance.Popup;
+        Popup.SetActive(true);
+        Popup.transform.position = DropdownButton.transform.position;
+        Popup.GetComponent<UI_MenuPopup>().IsComment = true;
+        Popup.GetComponent<UI_MenuPopup>().Refresh(_commentDto, this);
+    }
+
+    public void ModifyComment(CommentDTO commentDto)
+    {
+        _commentDto = commentDto;
+        ModifyInputField.text = ContentTextUI.text;
+        ContentTextUI.gameObject.SetActive(false);
+        ModifyInputField.gameObject.SetActive(true);
+    }
+
+    public async void OnModifyCommentEndEdit(string text)
+    {
+        bool success = await CommentManager.Instance.TryUpdateComment(_postDto, _commentDto, text);
+
+        if (success)
+        {
+            Debug.Log("댓글 수정 성공");
+            ModifyInputField.text = "";
+            ContentTextUI.text = text;
+            ContentTextUI.gameObject.SetActive(true);
+            ModifyInputField.gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.Log("댓글 수정 실패");
+        }
+    }
     private async void Like()
     {
         // 버튼 비활성화로 중복 클릭 방지
