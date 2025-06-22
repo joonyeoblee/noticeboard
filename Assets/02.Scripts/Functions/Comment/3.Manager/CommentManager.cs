@@ -20,7 +20,8 @@ public class CommentManager : Singleton<CommentManager>
         post.AddComment(comment);
         postDto = post.ToDto();
         await _repository.AddComment(postDto, comment.ToDto());
-        OnDataChanged?.Invoke(postDto);
+        PostDTO newLoadPostDto = await PostManager.Instance.TryGetPost(postDto);
+        OnDataChanged?.Invoke(newLoadPostDto);
         return true;
     }
 

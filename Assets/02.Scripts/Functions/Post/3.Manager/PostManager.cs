@@ -68,7 +68,10 @@ public class PostManager : Singleton<PostManager>
 		// CommentManager.Instance.InvokeAction(PostDtos[index]);
 		return await _repository.RemoveLike(postDto, likeDto);
 	}
-
+	public async Task<PostDTO> TryGetPost(PostDTO postDto)
+	{
+		return await _repository.GetPost(postDto.PostID);
+	}
 	public PostDTO GetPostById(string postId)
 	{
 		return PostDtos?.Find(p => p.PostID == postId);

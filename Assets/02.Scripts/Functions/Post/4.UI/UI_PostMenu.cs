@@ -19,7 +19,6 @@ public class UI_PostMenu : MonoBehaviour
 			LikeImage[1].SetActive(true);
 			_isLiked = true;
 			_myLike = _post.Likes.FirstOrDefault(like => like.Email == account.Email);
-			Debug.Log(_isLiked);
 		}
 		else
 		{
@@ -27,7 +26,6 @@ public class UI_PostMenu : MonoBehaviour
 			_myLike = null;
 			LikeImage[0].SetActive(true);
 			LikeImage[1].SetActive(false);
-			Debug.Log(_isLiked);
 		}
 	
 	}

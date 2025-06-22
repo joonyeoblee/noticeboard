@@ -51,6 +51,7 @@ public class PostRepository
 				var commentQuerySnapshot = await _db.Collection("Post")
 					.Document(postDto.PostID)
 					.Collection("Comment")
+					.OrderBy("CommentTime") // 타임스탬프 오름차순 정렬
 					.GetSnapshotAsync();
 
 				foreach (DocumentSnapshot commentDoc in commentQuerySnapshot.Documents)
@@ -115,11 +116,12 @@ public class PostRepository
 					likeDtos.Add(likeDto);
 				}
 
-				QuerySnapshot CommentQuerySnapshot = await _db.Collection("Post")
+				var commentQuerySnapshot = await _db.Collection("Post")
 					.Document(postId)
 					.Collection("Comment")
+					.OrderBy("CommentTime") // 타임스탬프 오름차순 정렬
 					.GetSnapshotAsync();
-				foreach (DocumentSnapshot CommentDoc in CommentQuerySnapshot.Documents)
+				foreach (DocumentSnapshot CommentDoc in commentQuerySnapshot.Documents)
 				{
 					CommentDTO CommentDto = CommentDoc.ConvertTo<CommentDTO>();
 					
