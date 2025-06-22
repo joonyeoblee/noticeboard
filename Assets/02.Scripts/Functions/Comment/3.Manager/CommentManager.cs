@@ -79,8 +79,38 @@ public class CommentManager : Singleton<CommentManager>
     }
     public async Task TryRemoveComment(PostDTO postDto, CommentDTO commentDto)
     {
-        await _repository.RemoveComment(postDto, commentDto); 
-        OnDataChanged?.Invoke(postDto);
+        try
+        {
+            // null 체크 추가
+            if (postDto?.PostID == null || commentDto?.CommentID == null)
+            {
+                Debug.LogError("PostDTO or CommentDTO is null or missing required IDs");
+                return;
+            }
+
+            await _repository.RemoveComment(postDto, commentDto);
+        
+            // 로컬 데이터 업데이트
+            PostDTO newLoadPostDto = await PostManager.Instance.TryGetPost(postDto);
+        
+            // PostManager의 PostDtos도 업데이트
+            var postInManager = PostManager.Instance.GetPostById(postDto.PostID);
+            if (postInManager != null)
+            {
+                int index = PostManager.Instance.PostDtos.FindIndex(p => p.PostID == postDto.PostID);
+                if (index != -1)
+                {
+                    PostManager.Instance.PostDtos[index] = newLoadPostDto;
+                }
+            }
+        
+            PostManager.Instance.OnDataChanged?.Invoke();
+            OnDataChanged?.Invoke(newLoadPostDto);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"Failed to remove comment: {e.Message}");
+        }
     }
 
     // 댓글 좋아요 제거

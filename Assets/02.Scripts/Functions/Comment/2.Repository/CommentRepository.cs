@@ -38,12 +38,20 @@ public class CommentRepository
 	{
 		try
 		{
+			// null 체크 추가
+			if (postDto?.PostID == null || CommentDto?.CommentID == null)
+			{
+				Debug.LogError("Required IDs are null - PostID or CommentID");
+				return;
+			}
+
 			// 'Post' 컬렉션에서 해당 postId의 문서의 서브컬렉션 'Comment' 가져오기
 			DocumentReference CommentRef = _db.Collection("Post")
 				.Document(postDto.PostID)
 				.Collection("Comment").Document(CommentDto.CommentID);
 
 			await CommentRef.DeleteAsync();
+			Debug.Log("댓글 삭제 완료");
 		}
 		catch (Exception e)
 		{

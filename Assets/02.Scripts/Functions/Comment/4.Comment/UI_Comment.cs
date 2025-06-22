@@ -28,7 +28,10 @@ public class UI_Comment : MonoBehaviour
     {
         ModifyInputField.onEndEdit.AddListener(OnModifyCommentEndEdit);
     }
-
+    public PostDTO GetPostDTO()
+    {
+        return _postDto;
+    }
     public void Refresh(CommentDTO commentDTO, PostDTO postDto)
     {
         _commentDto = commentDTO;
@@ -45,7 +48,15 @@ public class UI_Comment : MonoBehaviour
             Debug.LogError("Current account is null");
             return;
         }
-		
+        var latestPost = PostManager.Instance.GetPostById(postDto.PostID);
+        if (latestPost != null)
+        {
+            _postDto = latestPost;
+        }
+        else
+        {
+            _postDto = postDto;
+        }
         if (_commentDto.Likes != null && _commentDto.Likes.Any(like => like.Email == account.Email))
         {
             _isLiked = true;
@@ -60,6 +71,9 @@ public class UI_Comment : MonoBehaviour
             LikeImage[0].SetActive(true);
             LikeImage[1].SetActive(false);
         }
+        
+        bool isMyPost = _postDto.Email == AccountManager.Instance.CurrentAccount.Email;
+        DropdownButton.gameObject.SetActive(isMyPost);
     }
     public void OnClickMenuButton()
     {
