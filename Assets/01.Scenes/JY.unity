@@ -626,7 +626,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1125359075515549374, guid: 6685f12ab6855c640bb13a120efdc461, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1270589000187398509, guid: 6685f12ab6855c640bb13a120efdc461, type: 3}
       propertyPath: m_text
