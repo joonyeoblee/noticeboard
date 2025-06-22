@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Firebase.Firestore;
-
 [FirestoreData]
 public class CommentDTO
 {
@@ -41,6 +40,6 @@ public class CommentDTO
 
     public Comment ToDomain()
     {
-        return new Comment(CommentID, Email, Nickname, Content, CommentTime);
+        return new Comment(Email, Nickname, Content, CommentTime);
     }
 }

@@ -15,12 +15,12 @@ public class Post
 	public IReadOnlyList<Comment> Comments => _comments; // Comments도 동일하게 적용
 	public Post() { }
 
-	public Post(string email, string nickname, string postID, string content, int like = 0, int viewCount = 0)
-		: this(email, nickname, postID, content, like, viewCount, Timestamp.GetCurrentTimestamp())
+	public Post(string email, string nickname, string postID, string content, int viewCount = 0)
+		: this(email, nickname, postID, content, viewCount, Timestamp.GetCurrentTimestamp())
 	{
 	}
 
-	public Post(string email, string nickname, string postID, string content, int like, int viewCount, Timestamp postTime)
+	public Post(string email, string nickname, string postID, string content, int viewCount, Timestamp postTime)
 	{
 		AccountEmailSpecification accountEmailSpecification = new AccountEmailSpecification();
 		if (!accountEmailSpecification.IsSatisfiedBy(email))
@@ -39,20 +39,18 @@ public class Post
 			throw new Exception("PostID는 비어있을 수 없습니다");
 		}
 
-		if (string.IsNullOrEmpty(content))
+		PostContentSpecification postContentSpecification = new PostContentSpecification();
+		if (!postContentSpecification.IsSatisfiedBy(content))
 		{
-			throw new Exception("content은 비어있을 수 없습니다");
+			throw new Exception(postContentSpecification.ErrorMessage);
 		}
-
-		if (like < 0)
-		{
-			throw new Exception("like수는 0보다 작을 수 없습니다");
-		}
+		
 
 		if (viewCount < 0)
 		{
 			throw new Exception("viewCount는 0보다 작을 수 없습니다");
 		}
+		
 		Email = email;
 		Nickname = nickname;
 		PostID = postID;

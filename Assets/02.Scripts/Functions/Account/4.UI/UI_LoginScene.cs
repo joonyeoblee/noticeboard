@@ -137,28 +137,6 @@ public class UI_LoginScene : MonoBehaviour
             LoginInputFields.ResultText.text = passwordSpecification.ErrorMessage;
             return;
         }
-        
-        // 3. PlayerPrefs.Get을 이용해서 아이디와 비밀번호가 맞는지 확인한다.
-        // if (AccountManager.Instance.TryLogin(email, password))
-        // {
-        //     LoginInputFields.ResultText.text = "아이디와 비밀번호를 확인해주세요";
-        // }
-        // else
-        // {
-        //     SceneManager.LoadScene(1);   
-        // }
-        // string hashedPassword = PlayerPrefs.GetString(PREFIX + id);
-        // if (hashedPassword != Encryption(password + SALT))
-        // {
-        //     LoginInputFields.ResultText.text = "아이디와 비밀번호를 확인해주세요";
-        //     return;
-        // }
-        // // 4. 맞다면 로그인
-        // else
-        // {
-        //     LoginInputFields.ResultText.text = "로그인 성공";
-        //     // 로그인 성공 시 처리
-        //     // LoadingScene으로 이동
     }
     
     // 아이디와 비밀번호 InputField 값이 바뀌었을 경우에만.

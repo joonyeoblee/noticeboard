@@ -1,10 +1,7 @@
-using Firebase.Auth;
+using System;
 using Firebase.Firestore;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
-
 public class UI_PostWrite : MonoBehaviour
 {
 	public TMP_InputField ContentInputField;
@@ -13,6 +10,14 @@ public class UI_PostWrite : MonoBehaviour
 	{
 		AccountDTO accountDto = AccountManager.Instance.CurrentAccount;
 		string Time = Timestamp.GetCurrentTimestamp().ToString();
+
+		// 명세
+		PostContentSpecification postSpecification = new PostContentSpecification();
+		if (!postSpecification.IsSatisfiedBy(ContentInputField.text))
+		{
+			throw new Exception(postSpecification.ErrorMessage);
+		}
+		
 		Post post = new Post(accountDto.Email, accountDto.Nickname,$"{accountDto.Email}_{Time}",ContentInputField.text);
 		await PostManager.Instance.TryAddPost(post.ToDto());
 		
