@@ -1,15 +1,12 @@
 using System;
 using System.Threading.Tasks;
-using Firebase.Auth;
-using Firebase.Extensions;
-using Firebase.Firestore;
 using UnityEngine;
 public class AccountManager : Singleton<AccountManager>
 {
     private AccountRepository _repository;
 
-    public AccountDTO CurrentAccount = new AccountDTO("12313@aaa.com","나는짱이야");
-
+    public AccountDTO CurrentAccount;
+    
     private async void Start()
     {
         await FirebaseConnect.Instance.Initialization;

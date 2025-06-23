@@ -1,6 +1,4 @@
-using System;
 using UnityEngine;
-
 public class UI_MenuPopup : MonoBehaviour
 {
     private PostDTO _postDto;
@@ -33,40 +31,33 @@ public class UI_MenuPopup : MonoBehaviour
 
     public async void OnClickDeleteButton()
     {
-        try
+
+        if (IsComment == false)
         {
-            if (IsComment == false)
+            if (_postDto?.PostID != null)
             {
-                if (_postDto?.PostID != null)
-                {
-                    await PostManager.Instance.TryRemovePost(_postDto);
-                }
-                else
-                {
-                    Debug.LogError("PostDTO is null or missing PostID");
-                }
+                await PostManager.Instance.TryRemovePost(_postDto);
             }
             else
             {
-                // 댓글 삭제의 경우 UI_Comment에서 PostDTO를 직접 가져오기
-                PostDTO currentPostDto = _ui_Comment.GetPostDTO();
-                if (currentPostDto?.PostID != null && _commentDto?.CommentID != null)
-                {
-                    await CommentManager.Instance.TryRemoveComment(currentPostDto, _commentDto);
-                }
-                else
-                {
-                    Debug.LogError("PostDTO or CommentDTO is null or missing required IDs");
-                }
+                Debug.LogError("PostDTO is null or missing PostID");
             }
-
-            gameObject.SetActive(false);
         }
-        catch (Exception e)
+        else
         {
-            Debug.LogError($"Error in OnClickDeleteButton: {e.Message}");
-            gameObject.SetActive(false);
+            // 댓글 삭제의 경우 UI_Comment에서 PostDTO를 직접 가져오기
+            PostDTO currentPostDto = _ui_Comment.GetPostDTO();
+            if (currentPostDto?.PostID != null && _commentDto?.CommentID != null)
+            {
+                await CommentManager.Instance.TryRemoveComment(currentPostDto, _commentDto);
+            }
+            else
+            {
+                Debug.LogError("PostDTO or CommentDTO is null or missing required IDs");
+            }
         }
+
+        gameObject.SetActive(false);
     }
 
     public void OnClickBackButton()

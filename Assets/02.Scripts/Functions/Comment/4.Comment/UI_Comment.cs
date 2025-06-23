@@ -72,7 +72,7 @@ public class UI_Comment : MonoBehaviour
             LikeImage[1].SetActive(false);
         }
         
-        bool isMyPost = _postDto.Email == AccountManager.Instance.CurrentAccount.Email;
+        bool isMyPost = commentDTO.Email == AccountManager.Instance.CurrentAccount.Email;
         DropdownButton.gameObject.SetActive(isMyPost);
     }
     public void OnClickMenuButton()

@@ -33,6 +33,7 @@ public class UI_Post : MonoBehaviour
 		PosterNameTextUI.text = _post.Nickname;
 		PosterTimestampTextUI.text = DisplayTimestamp.GetPrettyTimeAgo(_post.PostTime);
 		ContentTextUI.text = _post.Content;
+		
 		if (LikeAndCommentTextUI != null)
 		{
 			Debug.Log($"{_post.Likes.Count} Count");

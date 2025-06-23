@@ -23,18 +23,17 @@ public class UI_PostModify : MonoBehaviour
     {
         string newContent = ModifyContentInputField.text;
 
-        if (string.IsNullOrWhiteSpace(newContent))
+        // 명세
+        PostContentSpecification postSpecification = new PostContentSpecification();
+        if (!postSpecification.IsSatisfiedBy(newContent))
         {
-            throw new Exception("수정할 내용이 비어 있습니다.");
+            throw new Exception(postSpecification.ErrorMessage);
         }
-
+        
         // 내용만 바꾼 새로운 Post 생성
         Post modifiedPost = new Post(_post.Email
             , _post.Nickname, _post.PostID
-            , newContent, _post.LikeCount
-            , _post.ViewCount, _post.PostTime);
-        
-        Debug.Log($"PostID = {modifiedPost.PostID}");
+            , newContent, _post.ViewCount, _post.PostTime);
 
         bool success = await PostManager.Instance.TryUpdatePost(modifiedPost);
 
