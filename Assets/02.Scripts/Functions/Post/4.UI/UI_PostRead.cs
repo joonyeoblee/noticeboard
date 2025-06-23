@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
-
 public class UI_PostRead : MonoBehaviour
 {
     private PostDTO _postDto;
@@ -82,8 +81,28 @@ public class UI_PostRead : MonoBehaviour
 
     public async void WriteComment()
     {
-        var accountDto = AccountManager.Instance.CurrentAccount;
-        var comment = new Comment(accountDto.Email, accountDto.Nickname, CommentContentInputField.text);
+        AccountDTO accountDto = AccountManager.Instance.CurrentAccount;
+
+        CommentContentSpecification commentContentSpecification = new CommentContentSpecification();
+        string content = CommentContentInputField.text;
+        if (!commentContentSpecification.IsSatisfiedBy(content))
+        {
+            throw new Exception(commentContentSpecification.ErrorMessage);
+        }
+
+        AccountEmailSpecification accountEmailSpecification = new AccountEmailSpecification();
+        if (!accountEmailSpecification.IsSatisfiedBy(accountDto.Email))
+        {
+            throw new Exception(accountEmailSpecification.ErrorMessage);
+        }
+
+        AccountNicknameSpecification accountNicknameSpecification = new AccountNicknameSpecification();
+        if (!accountNicknameSpecification.IsSatisfiedBy(accountDto.Nickname))
+        {
+            throw new Exception(accountNicknameSpecification.ErrorMessage);
+        }
+
+        Comment comment = new Comment(accountDto.Email, accountDto.Nickname, content);
 
         if (await CommentManager.Instance.TryWriteComment(_postDto, comment))
         {

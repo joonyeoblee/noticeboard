@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 public class UI_PostMenu : MonoBehaviour
@@ -31,6 +32,17 @@ public class UI_PostMenu : MonoBehaviour
 	}
 	private async void Like()
 	{
+		AccountEmailSpecification emailSpecification = new AccountEmailSpecification();
+		if (!emailSpecification.IsSatisfiedBy(account.Email))
+		{
+			throw new Exception(emailSpecification.ErrorMessage);
+		}
+
+		AccountNicknameSpecification nicknameSpecification = new AccountNicknameSpecification();
+		if (!nicknameSpecification.IsSatisfiedBy(account.Nickname))
+		{
+			throw new Exception(nicknameSpecification.ErrorMessage);
+		}
 		
 		Like like = new Like(account.Email, account.Nickname);
 
