@@ -16,19 +16,19 @@ public class Comment
     public Comment(string email, string nickname, string content, Timestamp commentTime)
     {
         AccountEmailSpecification accountEmailSpecification = new AccountEmailSpecification();
-        if (!accountEmailSpecification.IsSatisfiedBy(Email))
+        if (!accountEmailSpecification.IsSatisfiedBy(email))
         {
             throw new Exception(accountEmailSpecification.ErrorMessage);
         }
 
         AccountNicknameSpecification accountNicknameSpecification = new AccountNicknameSpecification();
-        if (!accountNicknameSpecification.IsSatisfiedBy(Nickname))
+        if (!accountNicknameSpecification.IsSatisfiedBy(nickname))
         {
             throw new Exception(accountNicknameSpecification.ErrorMessage);
         }
 
         CommentContentSpecification commentContentSpecification = new CommentContentSpecification();
-        if (!commentContentSpecification.IsSatisfiedBy(Content))
+        if (!commentContentSpecification.IsSatisfiedBy(content))
         {
             throw new Exception(commentContentSpecification.ErrorMessage);
         }
