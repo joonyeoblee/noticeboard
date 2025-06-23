@@ -42,12 +42,7 @@ public class UI_Comment : MonoBehaviour
         if (ContentTextUI != null) ContentTextUI.text = commentDTO.Content;
         if (LikeCountTextUI != null) LikeCountTextUI.text = commentDTO.LikeCount.ToString();
 		if(CommentTimeTextUI != null) CommentTimeTextUI.text = DisplayTimestamp.GetPrettyTimeAgo(commentDTO.CommentTime);
-        // 현재 계정 체크
-        if (account == null)
-        {
-            Debug.LogError("Current account is null");
-            return;
-        }
+
         var latestPost = PostManager.Instance.GetPostById(postDto.PostID);
         if (latestPost != null)
         {
